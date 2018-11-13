@@ -71,9 +71,15 @@
 //redundant, but to be explicit:
 {$asm}
 
-//Define a byte array, assign it to an expected unique value.
-//Note to self: This is this a friggin' byte array representation of assembler opcodes. As such, this is subject to change with each game update.
-//While I don't want to be critical, a better way would be to try to reference relative to Kingmaker:GameStatistic:Tick, IMO
+//Define a byte array, opcodes of known code to overwrite.
+//Note to self: This is this a friggin' byte array representation of assembler opcodes/operands. As such, this is subject to change with each game update.
+//Further note: This HAS changed before. Note the 'current' value does not match the original value highlighted with underscores (_):
+//    CURRENT:             48 8B 40 48 48 05 38 01 00 00 48 8B 00 48 89 45 C0 49 8D 87                 
+//    OG, block above:     48 8B 40 48 48 05_20_01 00 00 48 8B 00 48 89 45_90_49 8D 87 88 00 00 00     
+//Further note: The code found at 'INJECTING HERE' through 'DONE INJECTING' is not sufficient for a search. The search has to go forward to find the unique opcode/operant set:
+//    'INJECTING HERE':    48 8B 40 48 48 05 20 01 00 00 
+//    'DONE INJECTING':                                  48 8B 00 48 89 45 90 49 8D 87 88 00 00 00
+//all said and done, I think this is the fickle part of the script.
 define(injection_point_opcodes, 48 8B 40 48 48 05 38 01 00 00 48 8B 00 48 89 45 C0 49 8D 87)
 
 
