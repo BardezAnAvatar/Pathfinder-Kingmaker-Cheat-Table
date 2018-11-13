@@ -54,9 +54,11 @@ local kingmaker_tick_addr = mono_compile_method(mono_getJitInfo(getAddress('King
 print("Debug: Found Kingmaker Tick")
 print("Address: " .. kingmaker_tick_addr)
 
+--go back to ASM for sanity and consistency
+{$asm}
 
---syntax hint: still in LUA, since I am still in [ENABLE]
---When we disable this row, do the following:
+
+//When we disable this row, do the following:
 [DISABLE]
 //syntax hint: no longer in LUA
 //do nothing
