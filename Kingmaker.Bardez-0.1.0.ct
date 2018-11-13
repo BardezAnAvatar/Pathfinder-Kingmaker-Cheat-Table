@@ -49,13 +49,17 @@ end
 
 --Identify the location of Kingmaker:GameStatistic:Tick, compile (using Mono) if necessary.
 --Note To Self: where is the method address stored?
-mono_compile_method(mono_getJitInfo(getAddress('Kingmaker:GameStatistic:Tick')).method)
+local kingmaker_tick_addr = mono_compile_method(mono_getJitInfo(getAddress('Kingmaker:GameStatistic:Tick')).method)
 
 print("Debug: Found Kingmaker Tick")
+print("Address: " .. kingmaker_tick_addr)
 
+
+--syntax hint: still in LUA, since I am still in [ENABLE]
 --When we disable this row, do the following:
 [DISABLE]
---do nothing
+//syntax hint: no longer in LUA
+//do nothing
 </AssemblerScript>
       <CheatEntries>
         
