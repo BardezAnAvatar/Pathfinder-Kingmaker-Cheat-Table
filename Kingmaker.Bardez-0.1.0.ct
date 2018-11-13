@@ -27,9 +27,9 @@
       <AssemblerScript>{ Game   : Kingmaker.exe
   Version: 
   Date   : 2018-09-29
-  Author : Avifir
+  Author : Avifir, Niedzielan, Bardez
 
-  This script does blah blah blah
+  This script loads up the .NET assemblies, searches for Kingmaker:GameStatistic class, and injects code into that class' Tick(...) method
 }
 
 [ENABLE]
