@@ -33,131 +33,29 @@
   Note that this method is a core functionality of the Unity Game Engine, and is called frequently. Essentially, we inject code there that is called a bunch of times
   to ensure that we get our code ran over and over.
 }
+//When we toggle the row (i.e.: state change) do the following:
+// nothing, for now
+
 
 //When we enable this row, do the following:
 [ENABLE]
 
 //start with LUA language
 {$lua}
-//check to see if Mono is available. We use it to inject, so it's kind of a big deal.
+--check to see if Mono is available. We use it to inject, so it's kind of a big deal.
 if (LaunchMonoDataCollector()==0) then 
   error("no mono") 
 end
 
-//Identify the location of Kingmaker:GameStatistic:Tick, compile if necessary
+--Identify the location of Kingmaker:GameStatistic:Tick, compile (using Mono) if necessary.
+--Note To Self: where is the method address stored?
 mono_compile_method(mono_getJitInfo(getAddress('Kingmaker:GameStatistic:Tick')).method)
 
-//switch to Assembler for injecting code into Tick(...)
-{$asm}
-//Kingmaker:GameStatistic:Tick+C8 (ish)
-aobscanregion(INJECT_GameStatisticTick,Kingmaker:GameStatistic:Tick,Kingmaker:GameStatistic:Tick+23D,48 8B 40 48 48 05 38 01 00 00 48 8B 00 48 89 45 C0 49 8D 87)
-//aobscan(INJECT_GameStatisticTick,48 8B 40 48 48 05 30 01 00 00 48 8B 00 48 89 45 90 49 8D 87) // should be unique
-alloc(newmem,$1000)
+print("Debug: Found Kingmaker Tick")
 
-alloc(GameTimerPtr,8)
-registersymbol(GameTimerPtr)
-alloc(GameTimerPtr2,8)
-registersymbol(GameTimerPtr2)
-
-label(code)
-label(return)
-
-label(LastHoverChar)
-registersymbol(LastHoverChar)
-
-label(timeToAdd)
-registersymbol(timeToAdd)
-
-label(skip)
-
-newmem:
-
-mov [GameTimerPtr], rdi
-
-pushfq
-cmp [timeToAdd],#0
-je skip
-mov rcx, [timeToAdd]
-mov rdx, [rax+48]
-add [rdx+138],rcx
-mov qword ptr [timeToAdd],#0
-skip:
-popfq
-
-mov rdx,[rdi+98]
-cmp [rdx+18],#0
-je code
-mov rdx,[rdx+18]
-mov [LastHoverChar],rdx
-
-code:
-  mov rax,[rax+48]
-  //mov [GameTimerPtr2],rax
-  add rax,00000138
-  jmp return
-
-LastHoverChar:
-  dq 0
-
-timeToAdd:
-  dq 0
-
-INJECT_GameStatisticTick:
-  jmp newmem
-  nop
-  nop
-  nop
-  nop
-  nop
-return:
-registersymbol(INJECT_GameStatisticTick)
-
-
-
-//When we disable this row, do the following:
+--When we disable this row, do the following:
 [DISABLE]
-
-INJECT_GameStatisticTick:
-  db 48 8B 40 48 48 05 38 01 00 00
-
-unregistersymbol(INJECT_GameStatisticTick)
-dealloc(newmem)
-
-dealloc(GameTimerPtr)
-unregistersymbol(GameTimerPtr)
-dealloc(GameTimerPtr2)
-unregistersymbol(GameTimerPtr2)
-
-unregistersymbol(LastHoverChar)
-
-{
-// ORIGINAL CODE - INJECTION POINT: 2163AFEEA0E
-
-2163AFEE9DF: 48 8B C8                       -  mov rcx,rax
-2163AFEE9E2: 83 38 00                       -  cmp dword ptr [rax],00
-2163AFEE9E5: 90                             -  nop 
-2163AFEE9E6: 49 BB 70 B6 FF 3A 16 02 00 00  -  mov r11,Kingmaker:Player:get_IsInCombat
-2163AFEE9F0: 41 FF D3                       -  call r11
-2163AFEE9F3: 41 88 87 98 00 00 00           -  mov [r15+00000098],al
-2163AFEE9FA: 41 C6 87 80 00 00 00 00        -  mov byte ptr [r15+00000080],00
-2163AFEEA02: E9 6E 01 00 00                 -  jmp Kingmaker:GameStatistic:Tick+225
-2163AFEEA07: 83 3F 00                       -  cmp dword ptr [rdi],00
-2163AFEEA0A: 48 8B 47 50                    -  mov rax,[rdi+50]
-// ---------- INJECTING HERE ----------
-2163AFEEA0E: 48 8B 40 48                    -  mov rax,[rax+48]
-2163AFEEA12: 48 05 20 01 00 00              -  add rax,00000120
-// ---------- DONE INJECTING  ----------
-2163AFEEA18: 48 8B 00                       -  mov rax,[rax]
-2163AFEEA1B: 48 89 45 90                    -  mov [rbp-70],rax
-2163AFEEA1F: 49 8D 87 88 00 00 00           -  lea rax,[r15+00000088]
-2163AFEEA26: 48 8B 00                       -  mov rax,[rax]
-2163AFEEA29: 48 89 45 98                    -  mov [rbp-68],rax
-2163AFEEA2D: 48 8B 55 98                    -  mov rdx,[rbp-68]
-2163AFEEA31: 48 8B 4D 90                    -  mov rcx,[rbp-70]
-2163AFEEA35: 90                             -  nop 
-2163AFEEA36: 49 BB 60 90 8A 22 16 02 00 00  -  mov r11,System:TimeSpan:op_Subtraction
-2163AFEEA40: 41 FF D3                       -  call r11
-}
+--do nothing
 </AssemblerScript>
       <CheatEntries>
         
