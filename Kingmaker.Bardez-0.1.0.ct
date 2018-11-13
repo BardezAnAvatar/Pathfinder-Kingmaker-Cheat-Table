@@ -33,6 +33,38 @@
   Note that this method is a core functionality of the Unity Game Engine, and is called frequently. Essentially, we inject code there that is called a bunch of times
   to ensure that we get our code ran over and over.
 }
+{
+// ORIGINAL CODE - INJECTION POINT: 2163AFEEA0E
+
+2163AFEE9DF: 48 8B C8                       -  mov rcx,rax
+2163AFEE9E2: 83 38 00                       -  cmp dword ptr [rax],00
+2163AFEE9E5: 90                             -  nop 
+2163AFEE9E6: 49 BB 70 B6 FF 3A 16 02 00 00  -  mov r11,Kingmaker:Player:get_IsInCombat
+2163AFEE9F0: 41 FF D3                       -  call r11
+2163AFEE9F3: 41 88 87 98 00 00 00           -  mov [r15+00000098],al
+2163AFEE9FA: 41 C6 87 80 00 00 00 00        -  mov byte ptr [r15+00000080],00
+2163AFEEA02: E9 6E 01 00 00                 -  jmp Kingmaker:GameStatistic:Tick+225
+2163AFEEA07: 83 3F 00                       -  cmp dword ptr [rdi],00
+2163AFEEA0A: 48 8B 47 50                    -  mov rax,[rdi+50]
+// ---------- INJECTING HERE ----------
+2163AFEEA0E: 48 8B 40 48                    -  mov rax,[rax+48]
+2163AFEEA12: 48 05 20 01 00 00              -  add rax,00000120
+// ---------- DONE INJECTING  ----------
+2163AFEEA18: 48 8B 00                       -  mov rax,[rax]
+2163AFEEA1B: 48 89 45 90                    -  mov [rbp-70],rax
+2163AFEEA1F: 49 8D 87 88 00 00 00           -  lea rax,[r15+00000088]
+2163AFEEA26: 48 8B 00                       -  mov rax,[rax]
+2163AFEEA29: 48 89 45 98                    -  mov [rbp-68],rax
+2163AFEEA2D: 48 8B 55 98                    -  mov rdx,[rbp-68]
+2163AFEEA31: 48 8B 4D 90                    -  mov rcx,[rbp-70]
+2163AFEEA35: 90                             -  nop 
+2163AFEEA36: 49 BB 60 90 8A 22 16 02 00 00  -  mov r11,System:TimeSpan:op_Subtraction
+2163AFEEA40: 41 FF D3                       -  call r11
+}
+
+
+
+
 //When we toggle the row (i.e.: state change) do the following:
 // nothing, for now
 
@@ -41,7 +73,7 @@
 
 //declare a byte array, assign it to an expected unique value.
 //Note to self: is this a friggin' mix of assembler, and/or a hex representation of assembler opcodes?
-define(unique_identifier, 48 8B 40 48 48 05 38 01 00 00 48 8B 00 48 89 45 C0 49 8D 87)
+define(injection_point_opcodes, 48 8B 40 48 48 05 38 01 00 00 48 8B 00 48 89 45 C0 49 8D 87)
 
 
 //When we enable this row, do the following:
