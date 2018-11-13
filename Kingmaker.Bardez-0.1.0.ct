@@ -148,7 +148,9 @@ unregistersymbol(LastHoverChar)
 }
 </AssemblerScript>
       <CheatEntries>
-        <CheatEntry>
+        
+		<!-- "Game Time"
+		<CheatEntry>
           <ID>10172</ID>
           <Description>"Game Time"</Description>
           <ShowAsSigned>1</ShowAsSigned>
@@ -196,7 +198,10 @@ unregistersymbol(LastHoverChar)
             </CheatEntry>
           </CheatEntries>
         </CheatEntry>
-        <CheatEntry>
+        -->
+		
+		<!-- "Real Time"
+		<CheatEntry>
           <ID>10176</ID>
           <Description>"Real Time"</Description>
           <VariableType>8 Bytes</VariableType>
@@ -207,7 +212,10 @@ unregistersymbol(LastHoverChar)
             <Offset>50</Offset>
           </Offsets>
         </CheatEntry>
-        <CheatEntry>
+        -->
+		
+		<!-- "Money"
+		<CheatEntry>
           <ID>10177</ID>
           <Description>"Money"</Description>
           <VariableType>4 Bytes</VariableType>
@@ -218,7 +226,10 @@ unregistersymbol(LastHoverChar)
             <Offset>50</Offset>
           </Offsets>
         </CheatEntry>
-        <CheatEntry>
+        -->
+		
+		<!-- "Encumbrance"
+		<CheatEntry>
           <ID>10178</ID>
           <Description>"Encumbrance"</Description>
           <DropDownList DescriptionOnly="1" DisplayValueAsItem="1">0:Light
@@ -234,7 +245,10 @@ unregistersymbol(LastHoverChar)
             <Offset>50</Offset>
           </Offsets>
         </CheatEntry>
-        <CheatEntry>
+        -->
+		
+		<!-- "Speed Modifier (Map Movement)"
+		<CheatEntry>
           <ID>10179</ID>
           <Description>"Speed Modifier (Map Movement)"</Description>
           <VariableType>Float</VariableType>
@@ -246,7 +260,10 @@ unregistersymbol(LastHoverChar)
             <Offset>50</Offset>
           </Offsets>
         </CheatEntry>
-        <CheatEntry>
+        -->
+		
+		<!-- "Kingdom Speed Modifier (Map Movement)"
+		<CheatEntry>
           <ID>10180</ID>
           <Description>"Kingdom Speed Modifier (Map Movement)"</Description>
           <VariableType>Float</VariableType>
@@ -258,7 +275,10 @@ unregistersymbol(LastHoverChar)
             <Offset>50</Offset>
           </Offsets>
         </CheatEntry>
-        <CheatEntry>
+		-->
+        
+		<!-- "Difficulty"
+		<CheatEntry>
           <ID>10181</ID>
           <Description>"Difficulty"</Description>
           <Options moHideChildren="1"/>
@@ -384,7 +404,10 @@ unregistersymbol(LastHoverChar)
             </CheatEntry>
           </CheatEntries>
         </CheatEntry>
-        <CheatEntry>
+        -->
+		
+		<!-- "Kingdom"
+		<CheatEntry>
           <ID>10191</ID>
           <Description>"Kingdom"</Description>
           <Options moHideChildren="1"/>
@@ -2090,7 +2113,10 @@ unregistersymbol(LastHoverChar)
             </CheatEntry>
           </CheatEntries>
         </CheatEntry>
-        <CheatEntry>
+        -->
+		
+		<!-- "Hover-Over unit (last character you moved mouse over, including portraits)"
+		<CheatEntry>
           <ID>10330</ID>
           <Description>"Hover-Over unit (last character you moved mouse over, including portraits)"</Description>
           <Options moHideChildren="1"/>
@@ -3202,7 +3228,10 @@ unregistersymbol(LastHoverChar)
             </CheatEntry>
           </CheatEntries>
         </CheatEntry>
-        <CheatEntry>
+		-->
+        
+		<!-- "Party"
+		<CheatEntry>
           <ID>10424</ID>
           <Description>"Party"</Description>
           <Options moHideChildren="1"/>
@@ -11928,7 +11957,10 @@ unregistersymbol(LastHoverChar)
             </CheatEntry>
           </CheatEntries>
         </CheatEntry>
-        <CheatEntry>
+        -->
+		
+		<!-- "More Variables"
+		<CheatEntry>
           <ID>10959</ID>
           <Description>"More Variables"</Description>
           <Options moHideChildren="1"/>
@@ -11959,6 +11991,7 @@ unregistersymbol(LastHoverChar)
             </CheatEntry>
           </CheatEntries>
         </CheatEntry>
+		-->
       </CheatEntries>
     </CheatEntry>
     <CheatEntry>
