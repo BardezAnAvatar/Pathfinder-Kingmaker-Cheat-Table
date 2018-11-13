@@ -30,15 +30,24 @@
   Author : Avifir, Niedzielan, Bardez
 
   This script loads up the .NET assemblies, searches for Kingmaker:GameStatistic class, and injects code into that class' Tick(...) method
+  Note that this method is a core functionality of the Unity Game Engine, and is called frequently. Essentially, we inject code there that is called a bunch of times
+  to ensure that we get our code ran over and over.
 }
 
+//When we enable this row, do the following:
 [ENABLE]
+
+//start with LUA language
 {$lua}
+//check to see if Mono is available. We use it to inject, so it's kind of a big deal.
 if (LaunchMonoDataCollector()==0) then 
   error("no mono") 
 end
 
+//Identify the location of Kingmaker:GameStatistic:Tick, compile if necessary
 mono_compile_method(mono_getJitInfo(getAddress('Kingmaker:GameStatistic:Tick')).method)
+
+//switch to Assembler for injecting code into Tick(...)
 {$asm}
 //Kingmaker:GameStatistic:Tick+C8 (ish)
 aobscanregion(INJECT_GameStatisticTick,Kingmaker:GameStatistic:Tick,Kingmaker:GameStatistic:Tick+23D,48 8B 40 48 48 05 38 01 00 00 48 8B 00 48 89 45 C0 49 8D 87)
@@ -103,6 +112,9 @@ INJECT_GameStatisticTick:
 return:
 registersymbol(INJECT_GameStatisticTick)
 
+
+
+//When we disable this row, do the following:
 [DISABLE]
 
 INJECT_GameStatisticTick:
