@@ -71,8 +71,9 @@
 //redundant, but to be explicit:
 {$asm}
 
-//declare a byte array, assign it to an expected unique value.
-//Note to self: is this a friggin' mix of assembler, and/or a hex representation of assembler opcodes?
+//Define a byte array, assign it to an expected unique value.
+//Note to self: This is this a friggin' byte array representation of assembler opcodes. As such, this is subject to change with each game update.
+//While I don't want to be critical, a better way would be to try to reference relative to Kingmaker:GameStatistic:Tick, IMO
 define(injection_point_opcodes, 48 8B 40 48 48 05 38 01 00 00 48 8B 00 48 89 45 C0 49 8D 87)
 
 
