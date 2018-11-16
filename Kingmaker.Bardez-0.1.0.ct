@@ -11,6 +11,9 @@
 {$lua}
 --code from here to `[ENABLE]` will be run for both `[ENABLE]` and `[DISABLE]`
 
+--load structure definitions
+monoAA_GETMONOSTRUCT("Player")
+
 
 
 [ENABLE]
