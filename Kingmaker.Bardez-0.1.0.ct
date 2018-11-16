@@ -61,8 +61,6 @@ end
 
 --function to add a Kingmaker.Player address entry in the main Cheat Engine view
 local function AddKingMakerPlayerAddress(address)
-	print("found Kingmaker.PlayerInstance: " .. string.format('%x', address))
-
 	--fetch the header
 	local parent = addressList.getMemoryRecordByDescription(playerParentEntry)
 
@@ -84,10 +82,9 @@ end
 --declare variables
 instancesOfPlayer = {}
 
-
+--TODO: remove once certain this works
 print("")
 local KingmakerPlayerClassId = mono_findClass('Kingmaker', 'Player')
-print("KingmakerPlayerClassId: " .. string.format('%x', KingmakerPlayerClassId))
 
 --note: `mono_class_findInstancesOfClass` brings up the UI and finds a smaller list of instances.
 --      `mono_class_findInstancesOfClassListOnly` is programatic, but finds... more instances :-/
@@ -103,7 +100,6 @@ header.isGroupHeader = true
 
 --loop through results and add
 for index, foundInstance in pairs(instancesOfPlayer) do
-	--print("foundInstance: " .. string.format('%x', foundInstance))
 	AddKingMakerPlayerAddress(foundInstance)
 end
 
