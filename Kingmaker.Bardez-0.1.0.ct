@@ -22,6 +22,20 @@ if (LaunchMonoDataCollector()==0) then
   error("no mono") 
 end
 
+--declare variables
+instancesOfPlayer = {}
+
+
+print("")
+local KingmakerPlayerClassId = mono_findClass('Kingmaker', 'Player')
+print("KingmakerPlayerClassId: " .. KingmakerPlayerClassId)
+
+local instancesOfPlayer = mono_class_findInstancesOfClassListOnly(nil, KingmakerPlayerClassId)
+
+for index, foundInstance in pairs(instancesOfPlayer) do
+	print("foundInstance: " .. foundInstance)
+end
+
 
  
  
