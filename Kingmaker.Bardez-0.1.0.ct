@@ -20,6 +20,44 @@ local playerParentEntry = "KingMaker.Player (active game)"
 --used everywhere
 local addressList = getAddressList()
 
+--Adds a child memory record to the address list
+--params:
+--    parentAddressEntry: MemoryRecord to append to
+--    childIsHeader: Boolean value to set the child's `isGroupHeader` to
+--    childName: String value to set the child's `Description` to
+--    childAddress: Integer value to set the child's `Address` to
+--    childOffSetCount: Integer value to set the child's `OffsetCount` to
+--    childOffsets: Integer Array values to set the child's `Offset` array to
+--    childType: Integer; one of the following defined global constants:
+--                   vtByte=0
+--                   vtWord=1
+--                   vtDword=2
+--                   vtQword=3
+--                   vtSingle=4
+--                   vtDouble=5
+--                   vtString=6
+--                   vtUnicodeString=7 --Only used by autoguess
+--                   vtByteArray=8
+--                   vtBinary=9
+--                   vtAutoAssembler=11
+--                   vtPointer=12 --Only used by autoguess and structures
+--                   vtCustom=13
+--                   vtGrouped=14
+local function AddChildToParentAddressView(parentAddressEntry, childIsHeader, childName, childAddress, childOffSetCount, childOffsets, childType)
+	local child = addressList.createMemoryRecord()
+	child.isGroupHeader = childIsHeader
+	child.Description = childName
+	child.Address = childAddress
+	child.Type = childType
+
+	child.OffsetCount = childOffSetCount
+	--for index = 0, childOffSetCount do
+	--	child.Offset[index] = childOffsets[index]
+	--end
+
+	child.appendToEntry(parentAddressEntry)
+end
+
 --function to add a Kingmaker.Player address entry in the main Cheat Engine view
 local function AddKingMakerPlayerAddress(address)
 	print("found Kingmaker.PlayerInstance: " .. string.format('%x', address))
@@ -28,10 +66,7 @@ local function AddKingMakerPlayerAddress(address)
 	local parent = addressList.getMemoryRecordByDescription(playerParentEntry)
 
 	--attach a child
-	local child = addressList.createMemoryRecord()
-	child.Description = "Found `Kingmaker.Player` Instance"
-	child.Address = address
-	child.appendToEntry(parent)
+	AddChildToParentAddressView(parent, false, "Found `Kingmaker.Player` Instance", address, 0, {}, vtQword)
 end
 
 
