@@ -16,6 +16,13 @@
 [ENABLE]
 --code from here to `[DISABLE]` will be used to enable the cheat
 
+
+--check to see if Mono is available. We use it to inject, so it's kind of a big deal.
+if (LaunchMonoDataCollector()==0) then 
+  error("no mono") 
+end
+
+
  
  
 [DISABLE]
