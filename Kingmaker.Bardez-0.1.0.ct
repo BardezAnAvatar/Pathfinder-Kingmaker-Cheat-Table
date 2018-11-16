@@ -30,6 +30,11 @@ print("")
 local KingmakerPlayerClassId = mono_findClass('Kingmaker', 'Player')
 print("KingmakerPlayerClassId: " .. string.format('%x', KingmakerPlayerClassId))
 
+--note: `mono_class_findInstancesOfClass` brings up the UI and finds a smaller list of instances.
+--      `mono_class_findInstancesOfClassListOnly` is programatic, but finds... more instances :-/
+
+--local instancesOfPlayer = mono_class_findInstancesOfClass(nil, KingmakerPlayerClassId)
+
 local instancesOfPlayer = mono_class_findInstancesOfClassListOnly(nil, KingmakerPlayerClassId)
 
 for index, foundInstance in pairs(instancesOfPlayer) do
