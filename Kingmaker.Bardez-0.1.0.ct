@@ -51,9 +51,10 @@ local function AddChildToParentAddressView(parentAddressEntry, childIsHeader, ch
 	child.Type = childType
 
 	child.OffsetCount = childOffSetCount
-	--for index = 0, childOffSetCount do
-	--	child.Offset[index] = childOffsets[index]
-	--end
+	for index = 1, childOffSetCount do --apparently from 0 to 0 executes once. But from 1 to 0 does not.
+		print("I'm an offset!")
+		child.Offset[index] = childOffsets[index]
+	end
 
 	child.appendToEntry(parentAddressEntry)
 end
