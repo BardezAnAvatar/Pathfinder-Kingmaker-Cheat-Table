@@ -64,6 +64,8 @@ local function AddChildToParentAddressView(parentAddressEntry, childIsHeader, ch
 	end
 
 	child.appendToEntry(parentAddressEntry)
+	
+	return child
 end
 
 
