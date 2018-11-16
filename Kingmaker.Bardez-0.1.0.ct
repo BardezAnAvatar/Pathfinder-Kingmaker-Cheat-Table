@@ -14,6 +14,27 @@
 --load structure definitions
 monoAA_GETMONOSTRUCT("Player")
 
+--constants
+local playerParentEntry = "KingMaker.Player (active game)"
+
+--used everywhere
+local addressList = getAddressList() 
+
+--function to add a Kingmaker.Player address entry in the main Cheat Engine view
+local function AddKingMakerPlayerAddress(address)
+	print("found Kingmaker.PlayerInstance: " .. string.format('%x', address))
+
+	--fetch the header
+	local parent = addressList.getMemoryRecordByDescription(playerParentEntry)
+
+	--attach a child
+	local child = addressList.createMemoryRecord() 
+	child.Description = "Found `Kingmaker.Player` Instance" 
+	child.Address = address
+	child.appendToEntry(parent)
+
+end
+
 
 
 [ENABLE]
@@ -40,8 +61,15 @@ print("KingmakerPlayerClassId: " .. string.format('%x', KingmakerPlayerClassId))
 
 local instancesOfPlayer = mono_class_findInstancesOfClassListOnly(nil, KingmakerPlayerClassId)
 
+--create a header
+local header = addressList.createMemoryRecord() 
+header.Description = playerParentEntry
+header.isGroupHeader = true 
+
+--loop through results and add
 for index, foundInstance in pairs(instancesOfPlayer) do
-	print("foundInstance: " .. string.format('%x', foundInstance))
+	--print("foundInstance: " .. string.format('%x', foundInstance))
+	AddKingMakerPlayerAddress(foundInstance)
 end
 
 
@@ -49,6 +77,12 @@ end
  
 [DISABLE]
 --code from here till the end of the code will be used to disable the cheat
+
+--remove the Kingmaker.Player entries
+local parent = addressList.getMemoryRecordByDescription(playerParentEntry)
+memoryrecord_delete(parent) 
+ 
+
 </AssemblerScript>
     </CheatEntry>
   </CheatEntries>
