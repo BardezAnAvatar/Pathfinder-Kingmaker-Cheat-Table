@@ -20,6 +20,7 @@ local playerParentEntry = "KingMaker.Player (active game)"
 --used everywhere
 local addressList = getAddressList()
 
+
 --Adds a child memory record to the address list
 --params:
 --    parentAddressEntry: MemoryRecord to append to
@@ -59,8 +60,9 @@ local function AddChildToParentAddressView(parentAddressEntry, childIsHeader, ch
 	child.appendToEntry(parentAddressEntry)
 end
 
+
 --function to add a Kingmaker.Player address entry in the main Cheat Engine view
-local function AddKingMakerPlayerAddress(address)
+local function AddKingmakerPlayerAddress(address)
 	--fetch the header
 	local parent = addressList.getMemoryRecordByDescription(playerParentEntry)
 
@@ -68,6 +70,32 @@ local function AddKingMakerPlayerAddress(address)
 	AddChildToParentAddressView(parent, false, "Found `Kingmaker.Player` Instance", address, 0, {}, vtQword)
 end
 
+
+--function to search for and add `Kingmaker.Player` instances in memory to the address list
+local function FindKingmakerPlayerAddresses()
+	--declare variables
+	local instancesOfPlayer = {}
+
+	--TODO: remove once certain this functionality works
+	print("")
+	local KingmakerPlayerClassId = mono_findClass('Kingmaker', 'Player')
+
+	--note: `mono_class_findInstancesOfClass` brings up the UI and finds a smaller list of instances.
+	--      `mono_class_findInstancesOfClassListOnly` is programatic, but finds... more instances :-/
+
+	--local instancesOfPlayer = mono_class_findInstancesOfClass(nil, KingmakerPlayerClassId)
+	local instancesOfPlayer = mono_class_findInstancesOfClassListOnly(nil, KingmakerPlayerClassId)
+
+	--create a header
+	local header = addressList.createMemoryRecord()
+	header.Description = playerParentEntry
+	header.isGroupHeader = true
+	
+	--loop through results and add
+	for index, foundInstance in pairs(instancesOfPlayer) do
+		AddKingmakerPlayerAddress(foundInstance)
+	end
+end
 
 
 [ENABLE]
@@ -79,30 +107,7 @@ if (LaunchMonoDataCollector()==0) then
   error("no mono")
 end
 
---declare variables
-instancesOfPlayer = {}
-
---TODO: remove once certain this works
-print("")
-local KingmakerPlayerClassId = mono_findClass('Kingmaker', 'Player')
-
---note: `mono_class_findInstancesOfClass` brings up the UI and finds a smaller list of instances.
---      `mono_class_findInstancesOfClassListOnly` is programatic, but finds... more instances :-/
-
---local instancesOfPlayer = mono_class_findInstancesOfClass(nil, KingmakerPlayerClassId)
-
-local instancesOfPlayer = mono_class_findInstancesOfClassListOnly(nil, KingmakerPlayerClassId)
-
---create a header
-local header = addressList.createMemoryRecord()
-header.Description = playerParentEntry
-header.isGroupHeader = true
-
---loop through results and add
-for index, foundInstance in pairs(instancesOfPlayer) do
-	AddKingMakerPlayerAddress(foundInstance)
-end
-
+FindKingmakerPlayerAddresses()
 
 
 
