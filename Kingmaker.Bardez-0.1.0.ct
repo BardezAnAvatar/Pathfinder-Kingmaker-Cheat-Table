@@ -21,7 +21,7 @@ end
 monoAA_GETMONOSTRUCT("Player")
 
 --constants
-local playerParentEntry = "KingMaker.Player (active game)"
+local playerParentEntry = "Kingmaker.Player (active game)"
 
 --used everywhere
 local addressList = getAddressList()
