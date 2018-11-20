@@ -71,22 +71,21 @@ end
 
 --function to add all of the child fields of `Kingmaker.Player` to an added instance address node
 local function AddPlayerFields(instanceNode, instanceAddress)
-	print("hello")
-	--AddChildToParentAddressView(instanceNode, false, "CrossSceneState", address, 1, {Player.CrossSceneState}, vtPointer)
-	--AddChildToParentAddressView(instanceNode, false, "CrossSceneState", address + Player.CrossSceneState, 0, {}, vtQword)
+	--AddChildToParentAddressView(instanceNode, false, "CrossSceneState", instanceAddress, 1, {Player.CrossSceneState}, vtPointer)
+	--AddChildToParentAddressView(instanceNode, false, "CrossSceneState", instanceAddress + Player.CrossSceneState, 0, {}, vtQword)
 	
-	--AddChildToParentAddressView(instanceNode, false, "Found `Kingmaker.Player` Instance", address, 0, {}, vtPointer)
-	--AddChildToParentAddressView(instanceNode, false, "Found `Kingmaker.Player` Instance", address, 0, {}, vtPointer)
-	--AddChildToParentAddressView(instanceNode, false, "Found `Kingmaker.Player` Instance", address, 0, {}, vtPointer)
-	--AddChildToParentAddressView(instanceNode, false, "Found `Kingmaker.Player` Instance", address, 0, {}, vtPointer)
-	--AddChildToParentAddressView(instanceNode, false, "Found `Kingmaker.Player` Instance", address, 0, {}, vtPointer)
-	--AddChildToParentAddressView(instanceNode, false, "Found `Kingmaker.Player` Instance", address, 0, {}, vtPointer)
-	--AddChildToParentAddressView(instanceNode, false, "Found `Kingmaker.Player` Instance", address, 0, {}, vtPointer)
-	--AddChildToParentAddressView(instanceNode, false, "Found `Kingmaker.Player` Instance", address, 0, {}, vtPointer)
-	--AddChildToParentAddressView(instanceNode, false, "Found `Kingmaker.Player` Instance", address, 0, {}, vtPointer)
-	--AddChildToParentAddressView(instanceNode, false, "Found `Kingmaker.Player` Instance", address, 0, {}, vtPointer)
-	--AddChildToParentAddressView(instanceNode, false, "Found `Kingmaker.Player` Instance", address, 0, {}, vtPointer)
-	--AddChildToParentAddressView(instanceNode, false, "Found `Kingmaker.Player` Instance", address, 0, {}, vtPointer)
+	--AddChildToParentAddressView(instanceNode, false, "Found `Kingmaker.Player` Instance", instanceAddress, 0, {}, vtPointer)
+	--AddChildToParentAddressView(instanceNode, false, "Found `Kingmaker.Player` Instance", instanceAddress, 0, {}, vtPointer)
+	--AddChildToParentAddressView(instanceNode, false, "Found `Kingmaker.Player` Instance", instanceAddress, 0, {}, vtPointer)
+	--AddChildToParentAddressView(instanceNode, false, "Found `Kingmaker.Player` Instance", instanceAddress, 0, {}, vtPointer)
+	--AddChildToParentAddressView(instanceNode, false, "Found `Kingmaker.Player` Instance", instanceAddress, 0, {}, vtPointer)
+	--AddChildToParentAddressView(instanceNode, false, "Found `Kingmaker.Player` Instance", instanceAddress, 0, {}, vtPointer)
+	--AddChildToParentAddressView(instanceNode, false, "Found `Kingmaker.Player` Instance", instanceAddress, 0, {}, vtPointer)
+	--AddChildToParentAddressView(instanceNode, false, "Found `Kingmaker.Player` Instance", instanceAddress, 0, {}, vtPointer)
+	--AddChildToParentAddressView(instanceNode, false, "Found `Kingmaker.Player` Instance", instanceAddress, 0, {}, vtPointer)
+	--AddChildToParentAddressView(instanceNode, false, "Found `Kingmaker.Player` Instance", instanceAddress, 0, {}, vtPointer)
+	--AddChildToParentAddressView(instanceNode, false, "Found `Kingmaker.Player` Instance", instanceAddress, 0, {}, vtPointer)
+	--AddChildToParentAddressView(instanceNode, false, "Found `Kingmaker.Player` Instance", instanceAddress, 0, {}, vtPointer)
 end
 
 
