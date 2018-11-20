@@ -106,6 +106,8 @@ local function AddPlayerFields(instanceNode, instanceAddress)
 	AddChildToParentAddressView(instanceNode, false, "Current Formation Index", instanceAddress + Player["m_CurrentFormationIndex"], 0, {}, vtDword)
 	AddChildToParentAddressView(instanceNode, false, "Chapter", instanceAddress + Player["Chapter"], 0, {}, vtDword)
 	AddChildToParentAddressView(instanceNode, false, "Game ID", instanceAddress + Player["&lt;GameId&gt;k__BackingField"], 0, {}, vtQword)
+	AddChildToParentAddressView(instanceNode, false, "GameTime", instanceAddress + Player["GameTime"], 0, {}, vtQword)  --System.TimeSpan
+	AddChildToParentAddressView(instanceNode, false, "RealTime", instanceAddress + Player["RealTime"], 0, {}, vtQword)  --System.TimeSpan
 
 	--pointers for testing
 	AddChildToParentAddressView(instanceNode, false, "CrossSceneState", instanceAddress + Player.CrossSceneState, 0, {}, vtQword)
