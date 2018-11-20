@@ -102,6 +102,7 @@ end
 
 --function to add all of the child fields of `Kingmaker.Player` to an added instance address node
 local function AddPlayerFields(instanceNode, instanceAddress)
+	--reasonably editable data fields
 	AddChildToParentAddressView(instanceNode, false, "Money", instanceAddress + Player["&lt;Money&gt;k__BackingField"], 0, {}, vtQword)
 	AddChildToParentAddressView(instanceNode, false, "Current Formation Index", instanceAddress + Player["m_CurrentFormationIndex"], 0, {}, vtDword)
 	AddChildToParentAddressView(instanceNode, false, "Chapter", instanceAddress + Player["Chapter"], 0, {}, vtDword)
