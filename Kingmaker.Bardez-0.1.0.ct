@@ -18,7 +18,7 @@ if (LaunchMonoDataCollector()==0) then
 end
 
 --load structure definitions
-monoAA_GETMONOSTRUCT("Player")
+local KingmakerPlayer = monoAA_GETMONOSTRUCT("Player")
 
 --constants
 local playerParentEntry = "Kingmaker.Player (active game)"
