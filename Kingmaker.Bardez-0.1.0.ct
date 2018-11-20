@@ -14,11 +14,42 @@
 
 --check to see if Mono is available. We use it to inject, so it's kind of a big deal.
 if (LaunchMonoDataCollector()==0) then
-  error("no mono")
+	error("no mono")
 end
 
+--function to return an array(?) of fields and their offsets for the specified class name
+--params:
+--    namespace: namespace of the class to get a structure definition for
+--    className: name of the class to get a structure definition for
+function GetFields(namespace, className) 
+	local classId = mono_findClass(namespace, className)
+	local struct = monoform_exportStructInternal(createStructure(''), classId, 
+		true --[[recursive]], false --[[not static]], {'some struct map thing'}, false --[[not global]]) 
+
+	local fields = {} 
+	for i=0, struct.Count-1 do 
+		local e = struct.getElement(i) 
+		fields[e.name] = e.offset 
+	end 
+	return fields 
+end
+
+
+--function to regesister the structures necessary as global variables
+local function GenerateKingmakerStructureDefinitions()
+	Player = GetFields('Kingmaker', 'Player')
+
+
+	----DEBUG:
+	--for k,v in pairs(Player) do
+	--	print(k .. " " .. v)
+	--end
+end
+
+
 --load structure definitions
-local KingmakerPlayer = monoAA_GETMONOSTRUCT("Player")
+GenerateKingmakerStructureDefinitions()
+
 
 --constants
 local playerParentEntry = "Kingmaker.Player (active game)"
