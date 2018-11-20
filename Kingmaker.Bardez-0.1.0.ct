@@ -154,6 +154,8 @@ local function FindKingmakerPlayerAddresses()
 
 	--note: `mono_class_findInstancesOfClass` brings up the UI and finds a smaller list of instances.
 	--      `mono_class_findInstancesOfClassListOnly` is programatic, but finds... more instances :-/
+	--FURTHER NOTE: all of the UI additives aside, the difference appears to be that the former UI method reads ALL of the pointers and checks them for ANY being nil or 0.
+	
 
 	--local instancesOfPlayer = mono_class_findInstancesOfClass(nil, KingmakerPlayerClassId)
 	local instancesOfPlayer = mono_class_findInstancesOfClassListOnly(nil, KingmakerPlayerClassId)
@@ -165,6 +167,9 @@ local function FindKingmakerPlayerAddresses()
 	
 	--loop through results and add
 	for index, foundInstance in pairs(instancesOfPlayer) do
+		--TODO: The most obvious way to determine the active game instance by looking at found results is to watch the RealTime field. Only the active instance should be incrementing.
+		-- ... unfortunately, I don't think we have access to a Wait() or a Sleep() function.
+
 		AddKingmakerPlayerAddress(foundInstance)
 	end
 end
