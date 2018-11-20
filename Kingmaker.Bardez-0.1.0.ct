@@ -17,7 +17,7 @@ if (LaunchMonoDataCollector()==0) then
 	error("no mono")
 end
 
---function to return an array(?) of fields and their offsets for the specified class name
+--function to return a table of fields and their offsets for the specified class name
 --params:
 --    namespace: namespace of the class to get a structure definition for
 --    className: name of the class to get a structure definition for
