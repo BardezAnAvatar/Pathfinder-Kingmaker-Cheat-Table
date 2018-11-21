@@ -148,8 +148,7 @@ local function AddKingmakerPlayerAddress(address)
 	local parent = addressList.getMemoryRecordByDescription(playerParentEntry)
 
 	--attach a child
-	local instance = AddChildToParentAddressView(parent, false, "Found `Kingmaker.Player` Instance", address, 0, {}, vtQword)
-	AddPlayerFields(instance, address)
+	AddPlayerFields(parent, address)
 end
 
 
@@ -169,7 +168,9 @@ local function FindKingmakerPlayerAddresses()
 	--create a header
 	local header = addressList.createMemoryRecord()
 	header.Description = playerParentEntry
-	header.isGroupHeader = true
+	--header.isGroupHeader = true
+	header.Address = instanceStatePlayerPointer
+	header.options = "[moManualExpandCollapse]" 
 
 	AddKingmakerPlayerAddress(instanceStatePlayerPointer)
 end
