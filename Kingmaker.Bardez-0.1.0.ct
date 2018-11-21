@@ -105,7 +105,7 @@ local function AddPlayerFields(instanceNode, instanceAddress)
 	AddChildToParentAddressView(instanceNode, false, "RealTime", instanceAddress + Player["RealTime"].Offset, 0, {}, vtQword)  --System.TimeSpan
 
 	--pointers for testing
-	AddChildToParentAddressView(instanceNode, false, "CrossSceneState", instanceAddress + Player.CrossSceneState.Offset, 0, {}, vtQword)
+	AddChildToParentAddressView(instanceNode, false, "CrossSceneState", instanceAddress + Player["CrossSceneState"].Offset, 0, {}, vtQword)
 	AddChildToParentAddressView(instanceNode, false, "Dialog State", instanceAddress + Player["m_Dialog"].Offset, 0, {}, vtQword)
 	AddChildToParentAddressView(instanceNode, false, "Kingdom", instanceAddress + Player["Kingdom"].Offset, 0, {}, vtQword)
 	AddChildToParentAddressView(instanceNode, false, "Shared Stash", instanceAddress + Player["SharedStash"].Offset, 0, {}, vtQword)
@@ -140,17 +140,16 @@ end
 --function to evaluate whether the specified address is nil, 0, or a populated value
 local function IsNilOrZero(address)
 	local invalid = false
-	
+
 	if (address == nil or address == 0) then
 		invalid = true
 	else
 		local value = readQword(address)
-		print("value " .. value)
-	
+
 		if (nil == value) then invalid = true end
 		if (0 == value) then invalid = true end
 	end
-	
+
 	return invalid
 end
 
