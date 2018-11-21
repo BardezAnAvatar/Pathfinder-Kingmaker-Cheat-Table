@@ -153,27 +153,6 @@ local function AddKingmakerPlayerAddress(address)
 end
 
 
---function to evaluate whether the specified address is nil, 0, or a populated value
-local function IsNilOrZero(address, structField)
-	local invalid = false
-	if (structField.Vartype == vtPointer) then
-		local pointer = readPointer(address + structField.Offset)
-
-		if (pointer == nil) then
-			invalid = true
-		else
-			if (pointer ~- 0) then
-				local value = readQword(pointer)
-
-				if (value == nil) then invalid = true end
-			end
-		end
-	end
-
-	return invalid
-end
-
-
 --function to search for and add `Kingmaker.Player` instances in memory to the address list
 local function FindKingmakerPlayerAddresses()
 	--declare variables
@@ -181,33 +160,11 @@ local function FindKingmakerPlayerAddresses()
 
 	--TODO: remove once certain this functionality works
 	print("")
-	
-	
+
 	local staticKigmakerGameBaseAddress = GetStaticBaseAddress('Kingmaker', 'Game')
-	print("Kingmaker.Game.Instance: 0x" .. string.format('%x', staticKigmakerGameBaseAddress))
 	local instancePointer = readPointer(staticKigmakerGameBaseAddress + GameStatic["s_Instance"].Offset)
-	print("Kingmaker.Game.Instance: 0x: " .. string.format('%x', instancePointer))
 	local instanceStatePointer = readPointer(instancePointer + Game["State"].Offset)
-	print("Kingmaker.Game.Instance.State: " .. string.format('%x', instanceStatePointer))
 	local instanceStatePlayerPointer = readPointer(instanceStatePointer + PersistentState["PlayerState"].Offset)
-	print("Kingmaker.Game.Instance.State.Player: " .. string.format('%x', instanceStatePlayerPointer))
-	
-	
-	--note: `mono_class_findInstancesOfClass` brings up the UI and finds a smaller list of instances.
-	--      `mono_class_findInstancesOfClassListOnly` is programatic, but finds... more instances :-/
-	--FURTHER NOTE: all of the UI additives aside, the difference appears to be that the former UI method reads ALL of the pointers and checks them for ANY being nil or 0.
-
-    --local KingmakerPlayerClassId = mono_findClass('Kingmaker', 'Player')
-	--local instancesOfPlayer = mono_class_findInstancesOfClass(nil, KingmakerPlayerClassId)
-	--local instancesOfPlayer = mono_class_findInstancesOfClassListOnly(nil, KingmakerPlayerClassId)
-
-	----loop through results and add
-	--for index, foundInstance in pairs(instancesOfPlayer) do
-	--	--TODO: The most obvious way to determine the active game instance by looking at found results is to watch the RealTime field. Only the active instance should be incrementing.
-	--	-- ... unfortunately, I don't think we have access to a Wait() or a Sleep() function.
-    --
-	--	AttemptAddKingmakerPlayerAddress(foundInstance)
-	--end
 
 	--create a header
 	local header = addressList.createMemoryRecord()
