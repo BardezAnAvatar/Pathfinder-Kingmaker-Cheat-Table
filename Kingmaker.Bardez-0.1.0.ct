@@ -236,28 +236,41 @@ local function FindKingmakerPlayerAddresses()
 
 	--TODO: remove once certain this functionality works
 	print("")
-	local KingmakerPlayerClassId = mono_findClass('Kingmaker', 'Player')
-
+	
+	
+	local staticKigmakerGameBaseAddress = GetStaticBaseAddress('Kingmaker', 'Game')
+	print("Kingmaker.Game.Instance: 0x" .. string.format('%x', staticKigmakerGameBaseAddress))
+	
+	local instancePointer = readPointer(staticKigmakerGameBaseAddress + GameStatic["s_Instance"].Offset)
+	print("Kingmaker.Game.Instance: 0x: " .. string.format('%x', instancePointer))
+	local instanceStatePointer = readPointer(instancePointer + Game["State"].Offset)
+	print("Kingmaker.Game.Instance.State: " .. string.format('%x', instanceStatePointer))
+	local instanceStatePlayerPointer = readPointer(instanceStatePointer + PersistentState["PlayerState"].Offset)
+	print("Kingmaker.Game.Instance.State.Player: " .. string.format('%x', instanceStatePlayerPointer))
+	
+	
 	--note: `mono_class_findInstancesOfClass` brings up the UI and finds a smaller list of instances.
 	--      `mono_class_findInstancesOfClassListOnly` is programatic, but finds... more instances :-/
 	--FURTHER NOTE: all of the UI additives aside, the difference appears to be that the former UI method reads ALL of the pointers and checks them for ANY being nil or 0.
 
-
+    --local KingmakerPlayerClassId = mono_findClass('Kingmaker', 'Player')
 	--local instancesOfPlayer = mono_class_findInstancesOfClass(nil, KingmakerPlayerClassId)
-	local instancesOfPlayer = mono_class_findInstancesOfClassListOnly(nil, KingmakerPlayerClassId)
+	--local instancesOfPlayer = mono_class_findInstancesOfClassListOnly(nil, KingmakerPlayerClassId)
 
 	--create a header
 	local header = addressList.createMemoryRecord()
 	header.Description = playerParentEntry
 	header.isGroupHeader = true
 
-	--loop through results and add
-	for index, foundInstance in pairs(instancesOfPlayer) do
-		--TODO: The most obvious way to determine the active game instance by looking at found results is to watch the RealTime field. Only the active instance should be incrementing.
-		-- ... unfortunately, I don't think we have access to a Wait() or a Sleep() function.
+	----loop through results and add
+	--for index, foundInstance in pairs(instancesOfPlayer) do
+	--	--TODO: The most obvious way to determine the active game instance by looking at found results is to watch the RealTime field. Only the active instance should be incrementing.
+	--	-- ... unfortunately, I don't think we have access to a Wait() or a Sleep() function.
+    --
+	--	AttemptAddKingmakerPlayerAddress(foundInstance)
+	--end
 
-		AttemptAddKingmakerPlayerAddress(foundInstance)
-	end
+	AddKingmakerPlayerAddress(instanceStatePlayerPointer)
 end
 
 
