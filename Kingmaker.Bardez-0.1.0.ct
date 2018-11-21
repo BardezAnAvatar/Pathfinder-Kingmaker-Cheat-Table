@@ -51,7 +51,7 @@ end
 --    className: name of the class to get a structure definition for
 local function GetStaticBaseAddress(namespace, className)
 	local classId = mono_findClass(namespace, className)
-	local baseAddress = mono_class_getStaticFieldAddress(mono_enumDomains()[1], KingmakerGameClassId)
+	local baseAddress = mono_class_getStaticFieldAddress(mono_enumDomains()[1], classId)
 	print( string.format('%x', baseAddress))
 	
 	return baseAddress
