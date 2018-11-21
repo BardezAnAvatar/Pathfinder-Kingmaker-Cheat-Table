@@ -91,6 +91,7 @@ local addressList = getAddressList()
 --                   vtPointer=12 --Only used by autoguess and structures
 --                   vtCustom=13
 --                   vtGrouped=14
+--    dropDownList: an array(?) of values and displayable text for each value; nil if not intended to be populated
 local function AddChildToParentAddressView(parentAddressEntry, childIsHeader, childName, childAddress, childOffSetCount, childOffsets, childType, dropDownList)
 	local child = addressList.createMemoryRecord()
 	child.isGroupHeader = childIsHeader
@@ -116,12 +117,12 @@ end
 --function to add all of the child fields of `Kingmaker.Player` to an added instance address node
 local function AddPlayerFields(instanceNode, instanceAddress)
 	--reasonably editable data fields
-	AddChildToParentAddressView(instanceNode, false, "Money", "+0x" .. string.format('%x', Player["&lt;Money&gt;k__BackingField"].Offset), 0, {}, vtQword, nil)
-	AddChildToParentAddressView(instanceNode, false, "Current Formation Index", "+0x" .. string.format('%x', Player["m_CurrentFormationIndex"].Offset), 0, {}, vtDword, nil)
-	AddChildToParentAddressView(instanceNode, false, "Chapter", "+0x" .. string.format('%x', Player["Chapter"].Offset), 0, {}, vtDword, nil)
-	AddChildToParentAddressView(instanceNode, false, "Game ID", "+0x" .. string.format('%x', Player["&lt;GameId&gt;k__BackingField"].Offset), 0, {}, vtQword, nil)
-	AddChildToParentAddressView(instanceNode, false, "GameTime", "+0x" .. string.format('%x', Player["GameTime"].Offset), 0, {}, vtQword, nil)  --System.TimeSpan
-	AddChildToParentAddressView(instanceNode, false, "RealTime", "+0x" .. string.format('%x', Player["RealTime"].Offset), 0, {}, vtQword, nil)  --System.TimeSpan
+	AddChildToParentAddressView(instanceNode, false, "Money", "+0x" .. string.format('%x', Player["&lt;Money&gt;k__BackingField"].Offset), 0, {}, vtQword)
+	AddChildToParentAddressView(instanceNode, false, "Current Formation Index", "+0x" .. string.format('%x', Player["m_CurrentFormationIndex"].Offset), 0, {}, vtDword)
+	AddChildToParentAddressView(instanceNode, false, "Chapter", "+0x" .. string.format('%x', Player["Chapter"].Offset), 0, {}, vtDword)
+	AddChildToParentAddressView(instanceNode, false, "Game ID", "+0x" .. string.format('%x', Player["&lt;GameId&gt;k__BackingField"].Offset), 0, {}, vtQword)
+	AddChildToParentAddressView(instanceNode, false, "GameTime", "+0x" .. string.format('%x', Player["GameTime"].Offset), 0, {}, vtQword)  --System.TimeSpan
+	AddChildToParentAddressView(instanceNode, false, "RealTime", "+0x" .. string.format('%x', Player["RealTime"].Offset), 0, {}, vtQword)  --System.TimeSpan
 
 	local encumbrance = [[0:Light 
 1:Medium
