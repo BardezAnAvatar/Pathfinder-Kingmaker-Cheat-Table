@@ -52,8 +52,7 @@ end
 local function GetStaticBaseAddress(namespace, className)
 	local classId = mono_findClass(namespace, className)
 	local baseAddress = mono_class_getStaticFieldAddress(mono_enumDomains()[1], classId)
-	print( string.format('%x', baseAddress))
-	
+
 	return baseAddress
 end
 
@@ -175,60 +174,6 @@ local function IsNilOrZero(address, structField)
 end
 
 
---function to evaluate a Kingmaker.Player address entry and to add it in the main Cheat Engine view if it appears valid
-local function AttemptAddKingmakerPlayerAddress(address)
-	local appearsValid = true
-
-	--pointers for testing
-	if(IsNilOrZero(address, Player["m_ActiveCompanions"])) then appearsValid = false end
-	if(IsNilOrZero(address, Player["m_AllCharacters"])) then appearsValid = false end
-	if(IsNilOrZero(address, Player["m_AreaAmbienceData"])) then appearsValid = false end
-	if(IsNilOrZero(address, Player["m_Camping"])) then appearsValid = false end
-	if(IsNilOrZero(address, Player["m_ControllableCharacters"])) then appearsValid = false end
-	if(IsNilOrZero(address, Player["m_Dialog"])) then appearsValid = false end
-	if(IsNilOrZero(address, Player["m_GlobalMap"])) then appearsValid = false end
-	if(IsNilOrZero(address, Player["m_MainCharacter"])) then appearsValid = false end
-	if(IsNilOrZero(address, Player["m_Party"])) then appearsValid = false end
-	if(IsNilOrZero(address, Player["m_QuestBook"])) then appearsValid = false end
-	if(IsNilOrZero(address, Player["m_UnlockableFlags"])) then appearsValid = false end
-	if(IsNilOrZero(address, Player["Achievements"])) then appearsValid = false end
-	if(IsNilOrZero(address, Player["AppliedPlayerUpgraders"])) then appearsValid = false end
-	if(IsNilOrZero(address, Player["CompanionStories"])) then appearsValid = false end
-	if(IsNilOrZero(address, Player["CrossSceneState"])) then appearsValid = false end
-	if(IsNilOrZero(address, Player["CustomFormations"])) then appearsValid = false end
-	if(IsNilOrZero(address, Player["Difficulty"])) then appearsValid = false end
-	if(IsNilOrZero(address, Player["GogPremiumRewards"])) then appearsValid = false end
-	if(IsNilOrZero(address, Player["InspectUnitsManager"])) then appearsValid = false end
-	if(IsNilOrZero(address, Player["Kingdom"])) then appearsValid = false end
-	if(IsNilOrZero(address, Player["REManager"])) then appearsValid = false end
-	if(IsNilOrZero(address, Player["SavedInArea"])) then appearsValid = false end
-	if(IsNilOrZero(address, Player["SharedStash"])) then appearsValid = false end
-	if(IsNilOrZero(address, Player["SharedVendorTables"])) then appearsValid = false end
-	if(IsNilOrZero(address, Player["SteamPremiumRewards"])) then appearsValid = false end
-	if(IsNilOrZero(address, Player["UISettings"])) then appearsValid = false end
-	if(IsNilOrZero(address, Player["UpgradeActions"])) then appearsValid = false end
-	if(IsNilOrZero(address, Player["VisitedAreasData"])) then appearsValid = false end
-	if(IsNilOrZero(address, Player["Weather"])) then appearsValid = false end
-	if(IsNilOrZero(address, Player["&lt;DetachedPartyCharacters&gt;k__BackingField"])) then appearsValid = false end
-	if(IsNilOrZero(address, Player["&lt;ExCompanions&gt;k__BackingField"])) then appearsValid = false end
-	if(IsNilOrZero(address, Player["&lt;GameId&gt;k__BackingField"])) then appearsValid = false end
-	if(IsNilOrZero(address, Player["&lt;Inventory&gt;k__BackingField"])) then appearsValid = false end
-	if(IsNilOrZero(address, Player["&lt;PartyCharacters&gt;k__BackingField"])) then appearsValid = false end
-	if(IsNilOrZero(address, Player["&lt;RemoteCompanions&gt;k__BackingField"])) then appearsValid = false end
-	if(IsNilOrZero(address, Player["&lt;SelectedFormation&gt;k__BackingField"])) then appearsValid = false end
-	--if(IsNilOrZero(address, Player["&lt;Stalker&gt;k__BackingField"])) then appearsValid = false end
-	
-	--probably enums/structs
-	--if(IsNilOrZero(address, Player["m_CameraPos"])) then appearsValid = false end
-	--if(IsNilOrZero(address, Player["&lt;Encumbrance&gt;k__BackingField"])) then appearsValid = false end
-	--if(IsNilOrZero(address, Player["&lt;GameOverReason&gt;k__BackingField"])) then appearsValid = false end
-
-	if (appearsValid) then
-		AddKingmakerPlayerAddress(address)
-	end
-end
-
-
 --function to search for and add `Kingmaker.Player` instances in memory to the address list
 local function FindKingmakerPlayerAddresses()
 	--declare variables
@@ -240,7 +185,6 @@ local function FindKingmakerPlayerAddresses()
 	
 	local staticKigmakerGameBaseAddress = GetStaticBaseAddress('Kingmaker', 'Game')
 	print("Kingmaker.Game.Instance: 0x" .. string.format('%x', staticKigmakerGameBaseAddress))
-	
 	local instancePointer = readPointer(staticKigmakerGameBaseAddress + GameStatic["s_Instance"].Offset)
 	print("Kingmaker.Game.Instance: 0x: " .. string.format('%x', instancePointer))
 	local instanceStatePointer = readPointer(instancePointer + Game["State"].Offset)
@@ -257,11 +201,6 @@ local function FindKingmakerPlayerAddresses()
 	--local instancesOfPlayer = mono_class_findInstancesOfClass(nil, KingmakerPlayerClassId)
 	--local instancesOfPlayer = mono_class_findInstancesOfClassListOnly(nil, KingmakerPlayerClassId)
 
-	--create a header
-	local header = addressList.createMemoryRecord()
-	header.Description = playerParentEntry
-	header.isGroupHeader = true
-
 	----loop through results and add
 	--for index, foundInstance in pairs(instancesOfPlayer) do
 	--	--TODO: The most obvious way to determine the active game instance by looking at found results is to watch the RealTime field. Only the active instance should be incrementing.
@@ -269,6 +208,11 @@ local function FindKingmakerPlayerAddresses()
     --
 	--	AttemptAddKingmakerPlayerAddress(foundInstance)
 	--end
+
+	--create a header
+	local header = addressList.createMemoryRecord()
+	header.Description = playerParentEntry
+	header.isGroupHeader = true
 
 	AddKingmakerPlayerAddress(instanceStatePlayerPointer)
 end
