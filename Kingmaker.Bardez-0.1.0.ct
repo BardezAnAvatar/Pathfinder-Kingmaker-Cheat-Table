@@ -38,12 +38,6 @@ end
 --function to regesister the structures necessary as global variables
 local function GenerateKingmakerStructureDefinitions()
 	Player = GetFields('Kingmaker', 'Player')
-
-
-	----DEBUG:
-	--for k,v in pairs(Player) do
-	--	print(k .. " " .. v)
-	--end
 end
 
 
@@ -143,6 +137,76 @@ local function AddKingmakerPlayerAddress(address)
 end
 
 
+--function to evaluate whether the specified address is nil, 0, or a populated value
+local function IsNilOrZero(address)
+	local invalid = false
+	
+	if (address == nil or address == 0) then
+		invalid = true
+	else
+		local value = readQword(address)
+		print("value " .. value)
+	
+		if (nil == value) then invalid = true end
+		if (0 == value) then invalid = true end
+	end
+	
+	return invalid
+end
+
+
+--function to evaluate a Kingmaker.Player address entry and to add it in the main Cheat Engine view if it appears valid
+local function AttemptAddKingmakerPlayerAddress(address)
+	local appearsValid = true
+
+	--pointers for testing
+	if(IsNilOrZero(address + Player["CrossSceneState"].Offset)) then appearsValid = false end
+	if(IsNilOrZero(address + Player["m_QuestBook"].Offset)) then appearsValid = false end
+	if(IsNilOrZero(address + Player["m_UnlockableFlags"].Offset)) then appearsValid = false end
+	if(IsNilOrZero(address + Player["m_Dialog"].Offset)) then appearsValid = false end
+	if(IsNilOrZero(address + Player["m_GlobalMap"].Offset)) then appearsValid = false end
+	if(IsNilOrZero(address + Player["m_Camping"].Offset)) then appearsValid = false end
+	if(IsNilOrZero(address + Player["CompanionStories"].Offset)) then appearsValid = false end
+	if(IsNilOrZero(address + Player["m_AreaAmbienceData"].Offset)) then appearsValid = false end
+	if(IsNilOrZero(address + Player["VisitedAreasData"].Offset)) then appearsValid = false end
+	if(IsNilOrZero(address + Player["SavedInArea"].Offset)) then appearsValid = false end
+	if(IsNilOrZero(address + Player["&lt;ExCompanions&gt;k__BackingField"].Offset)) then appearsValid = false end
+	if(IsNilOrZero(address + Player["SteamPremiumRewards"].Offset)) then appearsValid = false end
+	if(IsNilOrZero(address + Player["m_MainCharacter"].Offset)) then appearsValid = false end
+	if(IsNilOrZero(address + Player["&lt;PartyCharacters&gt;k__BackingField"].Offset)) then appearsValid = false end
+	if(IsNilOrZero(address + Player["&lt;DetachedPartyCharacters&gt;k__BackingField"].Offset)) then appearsValid = false end
+	if(IsNilOrZero(address + Player["&lt;RemoteCompanions&gt;k__BackingField"].Offset)) then appearsValid = false end
+	if(IsNilOrZero(address + Player["&lt;Inventory&gt;k__BackingField"].Offset)) then appearsValid = false end
+	if(IsNilOrZero(address + Player["UISettings"].Offset)) then appearsValid = false end
+	if(IsNilOrZero(address + Player["&lt;SelectedFormation&gt;k__BackingField"].Offset)) then appearsValid = false end
+	if(IsNilOrZero(address + Player["CustomFormations"].Offset)) then appearsValid = false end
+	if(IsNilOrZero(address + Player["Difficulty"].Offset)) then appearsValid = false end
+	if(IsNilOrZero(address + Player["&lt;Stalker&gt;k__BackingField"].Offset)) then appearsValid = false end
+	if(IsNilOrZero(address + Player["Kingdom"].Offset)) then appearsValid = false end
+	if(IsNilOrZero(address + Player["SharedStash"].Offset)) then appearsValid = false end
+	if(IsNilOrZero(address + Player["REManager"].Offset)) then appearsValid = false end
+	if(IsNilOrZero(address + Player["SharedVendorTables"].Offset)) then appearsValid = false end
+	if(IsNilOrZero(address + Player["Achievements"].Offset)) then appearsValid = false end
+	if(IsNilOrZero(address + Player["InspectUnitsManager"].Offset)) then appearsValid = false end
+	if(IsNilOrZero(address + Player["UpgradeActions"].Offset)) then appearsValid = false end
+	if(IsNilOrZero(address + Player["AppliedPlayerUpgraders"].Offset)) then appearsValid = false end
+	if(IsNilOrZero(address + Player["Weather"].Offset)) then appearsValid = false end
+	if(IsNilOrZero(address + Player["m_Party"].Offset)) then appearsValid = false end
+	if(IsNilOrZero(address + Player["m_ControllableCharacters"].Offset)) then appearsValid = false end
+	if(IsNilOrZero(address + Player["m_ActiveCompanions"].Offset)) then appearsValid = false end
+	if(IsNilOrZero(address + Player["m_AllCharacters"].Offset)) then appearsValid = false end
+	if(IsNilOrZero(address + Player["&lt;GameId&gt;k__BackingField"].Offset)) then appearsValid = false end
+	if(IsNilOrZero(address + Player["m_CameraPos"].Offset)) then appearsValid = false end
+	if(IsNilOrZero(address + Player["&lt;GameOverReason&gt;k__BackingField"].Offset)) then appearsValid = false end
+	if(IsNilOrZero(address + Player["&lt;Encumbrance&gt;k__BackingField"].Offset)) then appearsValid = false end
+	if(IsNilOrZero(address + Player["GogPremiumRewards"].Offset)) then appearsValid = false end
+
+	if (appearsValid) then
+		AddKingmakerPlayerAddress(address)
+	end
+end
+
+
 --function to search for and add `Kingmaker.Player` instances in memory to the address list
 local function FindKingmakerPlayerAddresses()
 	--declare variables
@@ -170,7 +234,7 @@ local function FindKingmakerPlayerAddresses()
 		--TODO: The most obvious way to determine the active game instance by looking at found results is to watch the RealTime field. Only the active instance should be incrementing.
 		-- ... unfortunately, I don't think we have access to a Wait() or a Sleep() function.
 
-		AddKingmakerPlayerAddress(foundInstance)
+		AttemptAddKingmakerPlayerAddress(foundInstance)
 	end
 end
 
