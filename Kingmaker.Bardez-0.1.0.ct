@@ -21,17 +21,17 @@ end
 --params:
 --    namespace: namespace of the class to get a structure definition for
 --    className: name of the class to get a structure definition for
-function GetFields(namespace, className) 
+function GetFields(namespace, className)
 	local classId = mono_findClass(namespace, className)
-	local struct = monoform_exportStructInternal(createStructure(''), classId, 
-		true --[[recursive]], false --[[not static]], {'some struct map thing'}, false --[[not global]]) 
+	local struct = monoform_exportStructInternal(createStructure(''), classId,
+		true --[[recursive]], false --[[not static]], {'some struct map thing'}, false --[[not global]])
 
-	local fields = {} 
-	for i=0, struct.Count-1 do 
+	local fields = {}
+	for i=0, struct.Count-1 do
 		local e = struct.getElement(i)
 		fields[e.name] = e
-	end 
-	return fields 
+	end
+	return fields
 end
 
 
@@ -95,7 +95,7 @@ local function AddChildToParentAddressView(parentAddressEntry, childIsHeader, ch
 	end
 
 	child.appendToEntry(parentAddressEntry)
-	
+
 	return child
 end
 
@@ -155,7 +155,7 @@ local function FindKingmakerPlayerAddresses()
 	--note: `mono_class_findInstancesOfClass` brings up the UI and finds a smaller list of instances.
 	--      `mono_class_findInstancesOfClassListOnly` is programatic, but finds... more instances :-/
 	--FURTHER NOTE: all of the UI additives aside, the difference appears to be that the former UI method reads ALL of the pointers and checks them for ANY being nil or 0.
-	
+
 
 	--local instancesOfPlayer = mono_class_findInstancesOfClass(nil, KingmakerPlayerClassId)
 	local instancesOfPlayer = mono_class_findInstancesOfClassListOnly(nil, KingmakerPlayerClassId)
@@ -164,7 +164,7 @@ local function FindKingmakerPlayerAddresses()
 	local header = addressList.createMemoryRecord()
 	header.Description = playerParentEntry
 	header.isGroupHeader = true
-	
+
 	--loop through results and add
 	for index, foundInstance in pairs(instancesOfPlayer) do
 		--TODO: The most obvious way to determine the active game instance by looking at found results is to watch the RealTime field. Only the active instance should be incrementing.
