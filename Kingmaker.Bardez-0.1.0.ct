@@ -138,16 +138,20 @@ end
 
 
 --function to evaluate whether the specified address is nil, 0, or a populated value
-local function IsNilOrZero(address)
+local function IsNilOrZero(address, structField)
 	local invalid = false
+	if (structField.Vartype == vtPointer) then
+		local pointer = readPointer(address + structField.Offset)
 
-	if (address == nil or address == 0) then
-		invalid = true
-	else
-		local value = readQword(address)
+		if (pointer == nil) then
+			invalid = true
+		else
+			if (pointer ~- 0) then
+				local value = readQword(pointer)
 
-		if (nil == value) then invalid = true end
-		if (0 == value) then invalid = true end
+				if (value == nil) then invalid = true end
+			end
+		end
 	end
 
 	return invalid
@@ -159,46 +163,48 @@ local function AttemptAddKingmakerPlayerAddress(address)
 	local appearsValid = true
 
 	--pointers for testing
-	if(IsNilOrZero(address + Player["CrossSceneState"].Offset)) then appearsValid = false end
-	if(IsNilOrZero(address + Player["m_QuestBook"].Offset)) then appearsValid = false end
-	if(IsNilOrZero(address + Player["m_UnlockableFlags"].Offset)) then appearsValid = false end
-	if(IsNilOrZero(address + Player["m_Dialog"].Offset)) then appearsValid = false end
-	if(IsNilOrZero(address + Player["m_GlobalMap"].Offset)) then appearsValid = false end
-	if(IsNilOrZero(address + Player["m_Camping"].Offset)) then appearsValid = false end
-	if(IsNilOrZero(address + Player["CompanionStories"].Offset)) then appearsValid = false end
-	if(IsNilOrZero(address + Player["m_AreaAmbienceData"].Offset)) then appearsValid = false end
-	if(IsNilOrZero(address + Player["VisitedAreasData"].Offset)) then appearsValid = false end
-	if(IsNilOrZero(address + Player["SavedInArea"].Offset)) then appearsValid = false end
-	if(IsNilOrZero(address + Player["&lt;ExCompanions&gt;k__BackingField"].Offset)) then appearsValid = false end
-	if(IsNilOrZero(address + Player["SteamPremiumRewards"].Offset)) then appearsValid = false end
-	if(IsNilOrZero(address + Player["m_MainCharacter"].Offset)) then appearsValid = false end
-	if(IsNilOrZero(address + Player["&lt;PartyCharacters&gt;k__BackingField"].Offset)) then appearsValid = false end
-	if(IsNilOrZero(address + Player["&lt;DetachedPartyCharacters&gt;k__BackingField"].Offset)) then appearsValid = false end
-	if(IsNilOrZero(address + Player["&lt;RemoteCompanions&gt;k__BackingField"].Offset)) then appearsValid = false end
-	if(IsNilOrZero(address + Player["&lt;Inventory&gt;k__BackingField"].Offset)) then appearsValid = false end
-	if(IsNilOrZero(address + Player["UISettings"].Offset)) then appearsValid = false end
-	if(IsNilOrZero(address + Player["&lt;SelectedFormation&gt;k__BackingField"].Offset)) then appearsValid = false end
-	if(IsNilOrZero(address + Player["CustomFormations"].Offset)) then appearsValid = false end
-	if(IsNilOrZero(address + Player["Difficulty"].Offset)) then appearsValid = false end
-	if(IsNilOrZero(address + Player["&lt;Stalker&gt;k__BackingField"].Offset)) then appearsValid = false end
-	if(IsNilOrZero(address + Player["Kingdom"].Offset)) then appearsValid = false end
-	if(IsNilOrZero(address + Player["SharedStash"].Offset)) then appearsValid = false end
-	if(IsNilOrZero(address + Player["REManager"].Offset)) then appearsValid = false end
-	if(IsNilOrZero(address + Player["SharedVendorTables"].Offset)) then appearsValid = false end
-	if(IsNilOrZero(address + Player["Achievements"].Offset)) then appearsValid = false end
-	if(IsNilOrZero(address + Player["InspectUnitsManager"].Offset)) then appearsValid = false end
-	if(IsNilOrZero(address + Player["UpgradeActions"].Offset)) then appearsValid = false end
-	if(IsNilOrZero(address + Player["AppliedPlayerUpgraders"].Offset)) then appearsValid = false end
-	if(IsNilOrZero(address + Player["Weather"].Offset)) then appearsValid = false end
-	if(IsNilOrZero(address + Player["m_Party"].Offset)) then appearsValid = false end
-	if(IsNilOrZero(address + Player["m_ControllableCharacters"].Offset)) then appearsValid = false end
-	if(IsNilOrZero(address + Player["m_ActiveCompanions"].Offset)) then appearsValid = false end
-	if(IsNilOrZero(address + Player["m_AllCharacters"].Offset)) then appearsValid = false end
-	if(IsNilOrZero(address + Player["&lt;GameId&gt;k__BackingField"].Offset)) then appearsValid = false end
-	if(IsNilOrZero(address + Player["m_CameraPos"].Offset)) then appearsValid = false end
-	if(IsNilOrZero(address + Player["&lt;GameOverReason&gt;k__BackingField"].Offset)) then appearsValid = false end
-	if(IsNilOrZero(address + Player["&lt;Encumbrance&gt;k__BackingField"].Offset)) then appearsValid = false end
-	if(IsNilOrZero(address + Player["GogPremiumRewards"].Offset)) then appearsValid = false end
+	if(IsNilOrZero(address, Player["m_ActiveCompanions"])) then appearsValid = false end
+	if(IsNilOrZero(address, Player["m_AllCharacters"])) then appearsValid = false end
+	if(IsNilOrZero(address, Player["m_AreaAmbienceData"])) then appearsValid = false end
+	if(IsNilOrZero(address, Player["m_Camping"])) then appearsValid = false end
+	if(IsNilOrZero(address, Player["m_ControllableCharacters"])) then appearsValid = false end
+	if(IsNilOrZero(address, Player["m_Dialog"])) then appearsValid = false end
+	if(IsNilOrZero(address, Player["m_GlobalMap"])) then appearsValid = false end
+	if(IsNilOrZero(address, Player["m_MainCharacter"])) then appearsValid = false end
+	if(IsNilOrZero(address, Player["m_Party"])) then appearsValid = false end
+	if(IsNilOrZero(address, Player["m_QuestBook"])) then appearsValid = false end
+	if(IsNilOrZero(address, Player["m_UnlockableFlags"])) then appearsValid = false end
+	if(IsNilOrZero(address, Player["Achievements"])) then appearsValid = false end
+	if(IsNilOrZero(address, Player["AppliedPlayerUpgraders"])) then appearsValid = false end
+	if(IsNilOrZero(address, Player["CompanionStories"])) then appearsValid = false end
+	if(IsNilOrZero(address, Player["CrossSceneState"])) then appearsValid = false end
+	if(IsNilOrZero(address, Player["CustomFormations"])) then appearsValid = false end
+	if(IsNilOrZero(address, Player["Difficulty"])) then appearsValid = false end
+	if(IsNilOrZero(address, Player["GogPremiumRewards"])) then appearsValid = false end
+	if(IsNilOrZero(address, Player["InspectUnitsManager"])) then appearsValid = false end
+	if(IsNilOrZero(address, Player["Kingdom"])) then appearsValid = false end
+	if(IsNilOrZero(address, Player["REManager"])) then appearsValid = false end
+	if(IsNilOrZero(address, Player["SavedInArea"])) then appearsValid = false end
+	if(IsNilOrZero(address, Player["SharedStash"])) then appearsValid = false end
+	if(IsNilOrZero(address, Player["SharedVendorTables"])) then appearsValid = false end
+	if(IsNilOrZero(address, Player["SteamPremiumRewards"])) then appearsValid = false end
+	if(IsNilOrZero(address, Player["UISettings"])) then appearsValid = false end
+	if(IsNilOrZero(address, Player["UpgradeActions"])) then appearsValid = false end
+	if(IsNilOrZero(address, Player["VisitedAreasData"])) then appearsValid = false end
+	if(IsNilOrZero(address, Player["Weather"])) then appearsValid = false end
+	if(IsNilOrZero(address, Player["&lt;DetachedPartyCharacters&gt;k__BackingField"])) then appearsValid = false end
+	if(IsNilOrZero(address, Player["&lt;ExCompanions&gt;k__BackingField"])) then appearsValid = false end
+	if(IsNilOrZero(address, Player["&lt;GameId&gt;k__BackingField"])) then appearsValid = false end
+	if(IsNilOrZero(address, Player["&lt;Inventory&gt;k__BackingField"])) then appearsValid = false end
+	if(IsNilOrZero(address, Player["&lt;PartyCharacters&gt;k__BackingField"])) then appearsValid = false end
+	if(IsNilOrZero(address, Player["&lt;RemoteCompanions&gt;k__BackingField"])) then appearsValid = false end
+	if(IsNilOrZero(address, Player["&lt;SelectedFormation&gt;k__BackingField"])) then appearsValid = false end
+	--if(IsNilOrZero(address, Player["&lt;Stalker&gt;k__BackingField"])) then appearsValid = false end
+	
+	--probably enums/structs
+	--if(IsNilOrZero(address, Player["m_CameraPos"])) then appearsValid = false end
+	--if(IsNilOrZero(address, Player["&lt;Encumbrance&gt;k__BackingField"])) then appearsValid = false end
+	--if(IsNilOrZero(address, Player["&lt;GameOverReason&gt;k__BackingField"])) then appearsValid = false end
 
 	if (appearsValid) then
 		AddKingmakerPlayerAddress(address)
