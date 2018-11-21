@@ -38,6 +38,7 @@ end
 --function to regesister the structures necessary as global variables
 local function GenerateKingmakerStructureDefinitions()
 	Player = GetFields('Kingmaker', 'Player')
+	Game = GetFields('Kingmaker', 'Game')
 end
 
 
