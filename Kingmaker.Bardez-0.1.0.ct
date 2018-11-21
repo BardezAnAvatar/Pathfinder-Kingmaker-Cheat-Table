@@ -40,6 +40,7 @@ end
 local function GenerateKingmakerStructureDefinitions()
 	Player = GetFields('Kingmaker', 'Player', false)
 	Game = GetFields('Kingmaker', 'Game', false)
+	PersistentState = GetFields('Kingmaker', 'PersistentState', false)
 	GameStatic = GetFields('Kingmaker', 'Game', true)
 end
 
