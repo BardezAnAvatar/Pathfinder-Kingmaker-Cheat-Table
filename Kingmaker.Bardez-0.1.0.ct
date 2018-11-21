@@ -45,6 +45,19 @@ local function GenerateKingmakerStructureDefinitions()
 end
 
 
+--function to return a base address of a specified class for its static fields to be referenced.
+--params:
+--    namespace: namespace of the class to get a structure definition for
+--    className: name of the class to get a structure definition for
+local function GetStaticBaseAddress(namespace, className)
+	local classId = mono_findClass(namespace, className)
+	local baseAddress = mono_class_getStaticFieldAddress(mono_enumDomains()[1], KingmakerGameClassId)
+	print( string.format('%x', baseAddress))
+	
+	return baseAddress
+end
+
+
 --load structure definitions
 GenerateKingmakerStructureDefinitions()
 
