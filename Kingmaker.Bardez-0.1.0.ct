@@ -21,10 +21,11 @@ end
 --params:
 --    namespace: namespace of the class to get a structure definition for
 --    className: name of the class to get a structure definition for
-function GetFields(namespace, className)
+--    static: Boolean flag; do we want to fetch static fields?
+function GetFields(namespace, className, static)
 	local classId = mono_findClass(namespace, className)
 	local struct = monoform_exportStructInternal(createStructure(''), classId,
-		true --[[recursive]], false --[[not static]], {'some struct map thing'}, false --[[not global]])
+		true --[[recursive]], static, {'some struct map thing'}, false --[[not global]])
 
 	local fields = {}
 	for i=0, struct.Count-1 do
@@ -37,8 +38,9 @@ end
 
 --function to regesister the structures necessary as global variables
 local function GenerateKingmakerStructureDefinitions()
-	Player = GetFields('Kingmaker', 'Player')
-	Game = GetFields('Kingmaker', 'Game')
+	Player = GetFields('Kingmaker', 'Player', false)
+	Game = GetFields('Kingmaker', 'Game', false)
+	GameStatic = GetFields('Kingmaker', 'Game', true)
 end
 
 
