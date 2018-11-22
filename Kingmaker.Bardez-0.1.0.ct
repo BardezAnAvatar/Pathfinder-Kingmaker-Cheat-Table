@@ -240,12 +240,12 @@ local function AddPlayerFields(instanceNode, instanceAddress)
 
 
 	--pointers for testing
-	AddChildToParentAddressView(instanceNode, false, false, "CrossSceneState", "+0x" .. string.format('%x', Player["CrossSceneState"].Offset), vtQword)
-	AddChildToParentAddressView(instanceNode, false, false, "Dialog State", "+0x" .. string.format('%x', Player["m_Dialog"].Offset), vtQword)
-	AddChildToParentAddressView(instanceNode, false, false, "Shared Stash", "+0x" .. string.format('%x', Player["SharedStash"].Offset), vtQword)
-	AddChildToParentAddressView(instanceNode, false, false, "m_MainCharacter", "+0x" .. string.format('%x', Player["m_MainCharacter"].Offset), vtQword)
-	AddChildToParentAddressView(instanceNode, false, false, "&lt;Inventory&gt;k__BackingField", "+0x" .. string.format('%x', Player["&lt;Inventory&gt;k__BackingField"].Offset), vtQword)
-	AddChildToParentAddressView(instanceNode, false, false, "Achievements", "+0x" .. string.format('%x', Player["Achievements"].Offset), vtQword)
+	--AddChildToParentAddressView(instanceNode, false, false, "CrossSceneState", "+0x" .. string.format('%x', Player["CrossSceneState"].Offset), vtQword)
+	--AddChildToParentAddressView(instanceNode, false, false, "Dialog State", "+0x" .. string.format('%x', Player["m_Dialog"].Offset), vtQword)
+	--AddChildToParentAddressView(instanceNode, false, false, "Shared Stash", "+0x" .. string.format('%x', Player["SharedStash"].Offset), vtQword)
+	--AddChildToParentAddressView(instanceNode, false, false, "m_MainCharacter", "+0x" .. string.format('%x', Player["m_MainCharacter"].Offset), vtQword)
+	--AddChildToParentAddressView(instanceNode, false, false, "&lt;Inventory&gt;k__BackingField", "+0x" .. string.format('%x', Player["&lt;Inventory&gt;k__BackingField"].Offset), vtQword)
+	--AddChildToParentAddressView(instanceNode, false, false, "Achievements", "+0x" .. string.format('%x', Player["Achievements"].Offset), vtQword)
 end
 
 
