@@ -161,12 +161,12 @@ local function AddPlayerFields(instanceNode, instanceAddress)
 	--pointers to real, relevant classes
 	local globalMapNode = AddChildToParentAddressView(instanceNode, false, true, "Global Map (World Map)", "+0x" .. string.format('%x', Player["m_GlobalMap"].Offset), vtQword, nil, 1, { Player["m_GlobalMap"].Offset })
 	AddGlobalMapStateFields(globalMapNode, instanceAddress + Player["m_GlobalMap"].Offset)
+	local kingdomNode = AddChildToParentAddressView(instanceNode, false, true, "Kingdom", "+0x" .. string.format('%x', Player["Kingdom"].Offset), vtQword, nil, 1, { Player["Kingdom"].Offset })
 
 
 	--pointers for testing
 	AddChildToParentAddressView(instanceNode, false, false, "CrossSceneState", "+0x" .. string.format('%x', Player["CrossSceneState"].Offset), vtQword)
 	AddChildToParentAddressView(instanceNode, false, false, "Dialog State", "+0x" .. string.format('%x', Player["m_Dialog"].Offset), vtQword)
-	AddChildToParentAddressView(instanceNode, false, false, "Kingdom", "+0x" .. string.format('%x', Player["Kingdom"].Offset), vtQword)
 	AddChildToParentAddressView(instanceNode, false, false, "Shared Stash", "+0x" .. string.format('%x', Player["SharedStash"].Offset), vtQword)
 	AddChildToParentAddressView(instanceNode, false, false, "m_MainCharacter", "+0x" .. string.format('%x', Player["m_MainCharacter"].Offset), vtQword)
 	AddChildToParentAddressView(instanceNode, false, false, "&lt;Inventory&gt;k__BackingField", "+0x" .. string.format('%x', Player["&lt;Inventory&gt;k__BackingField"].Offset), vtQword)
