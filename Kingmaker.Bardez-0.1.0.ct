@@ -68,8 +68,21 @@ end
 GenerateKingmakerStructureDefinitions()
 
 
+
+
 --constants
 local playerParentEntry = "Kingmaker.Player (active game)"
+
+--Kingmaker.Enums.Alignment
+local alignment = [[1:True Neutral 
+3:Neutral Good
+5:Neutral Evil
+9:Lawful Neutral
+10:Lawful Good
+12:Lawful Evil
+17:Chaotic Neutral
+18:Chaotic Good
+20:Chaotic Evil]] 
 
 --used everywhere
 local addressList = getAddressList()
