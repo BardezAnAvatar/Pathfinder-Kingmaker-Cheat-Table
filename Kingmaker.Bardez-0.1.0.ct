@@ -169,14 +169,29 @@ end
 local function AddKingdomStateFields(instanceNode, instanceAddress)
 	--reasonably editable data fields
 	AddChildToParentAddressView(instanceNode, false, false, "Kingdom Name", "+0x" .. string.format('%x', KingdomState["KingdomName"].Offset), vtString)
-	AddChildToParentAddressView(instanceNode, false, false, "Alignment", "+0x" .. string.format('%x', KingdomState["Alignment"].Offset), vtDword, nil, 1, alignmentEnum)
+	AddChildToParentAddressView(instanceNode, false, false, "Alignment", "+0x" .. string.format('%x', KingdomState["Alignment"].Offset), vtDword, alignmentEnum)
+	AddChildToParentAddressView(instanceNode, false, false, "Start Day", "+0x" .. string.format('%x', KingdomState["&lt;StartDay&gt;k__BackingField"].Offset), vtDword)
+
 	AddChildToParentAddressView(instanceNode, false, false, "Current Turn #", "+0x" .. string.format('%x', KingdomState["CurrentTurn"].Offset), vtDword)
+	AddChildToParentAddressView(instanceNode, false, false, "Current Day", "+0x" .. string.format('%x', KingdomState["&lt;CurrentDay&gt;k__BackingField"].Offset), vtDword)
+
 	AddChildToParentAddressView(instanceNode, false, false, "BP", "+0x" .. string.format('%x', KingdomState["BP"].Offset), vtDword)
 	AddChildToParentAddressView(instanceNode, false, false, "BP per turn", "+0x" .. string.format('%x', KingdomState["BPPerTurn"].Offset), vtDword)
+	AddChildToParentAddressView(instanceNode, false, false, "BP per Region", "+0x" .. string.format('%x', KingdomState["&lt;BPPerRegion&gt;k__BackingField"].Offset), vtDword)
+	AddChildToParentAddressView(instanceNode, false, false, "BP per Upgrade", "+0x" .. string.format('%x', KingdomState["&lt;BPPerUpgrade&gt;k__BackingField"].Offset), vtDword)
+	AddChildToParentAddressView(instanceNode, false, false, "BP per turn Total", "+0x" .. string.format('%x', KingdomState["&lt;BPPerTurnTotal&gt;k__BackingField"].Offset), vtDword)
+
+	AddChildToParentAddressView(instanceNode, false, false, "Region Claim Cost Modifier", "+0x" .. string.format('%x', KingdomState["&lt;ClaimCostModifier&gt;k__BackingField"].Offset), vtSingle)
+	AddChildToParentAddressView(instanceNode, false, false, "Region Claim Time Modifier", "+0x" .. string.format('%x', KingdomState["&lt;ClaimTimeModifier&gt;k__BackingField"].Offset), vtSingle)
+	AddChildToParentAddressView(instanceNode, false, false, "Rank Up Cost Modifier", "+0x" .. string.format('%x', KingdomState["&lt;RankupTimeModifier&gt;k__BackingField"].Offset), vtSingle)
+	AddChildToParentAddressView(instanceNode, false, false, "Building Time Modifier", "+0x" .. string.format('%x', KingdomState["&lt;BuildingTimeModifier&gt;k__BackingField"].Offset), vtSingle)
+
+	AddChildToParentAddressView(instanceNode, false, false, "Unrest", "+0x" .. string.format('%x', KingdomState["&lt;Unrest&gt;k__BackingField"].Offset), vtDword, kingdomUnrestEnum)
 
 	--Raven crap
 	AddChildToParentAddressView(instanceNode, false, false, "Last Raven Visit Day", "+0x" .. string.format('%x', KingdomState["LastRavenVisitDay"].Offset), vtDword)
 	AddChildToParentAddressView(instanceNode, false, false, "BP on Last Raven Visit", "+0x" .. string.format('%x', KingdomState["BPOnLastRavenVisit"].Offset), vtDword)
+	AddChildToParentAddressView(instanceNode, false, false, "Unrest on Last Raven Visit", "+0x" .. string.format('%x', KingdomState["BPOnLastRavenVisit"].Offset), vtDword, kingdomUnrestEnum)
 
 end
 
@@ -205,6 +220,7 @@ local function AddPlayerFields(instanceNode, instanceAddress)
 	local globalMapNode = AddChildToParentAddressView(instanceNode, false, true, "Global Map (World Map)", "+0x" .. string.format('%x', Player["m_GlobalMap"].Offset), vtQword, nil, 1, { Player["m_GlobalMap"].Offset })
 	AddGlobalMapStateFields(globalMapNode, instanceAddress + Player["m_GlobalMap"].Offset)
 	local kingdomNode = AddChildToParentAddressView(instanceNode, false, true, "Kingdom", "+0x" .. string.format('%x', Player["Kingdom"].Offset), vtQword, nil, 1, { Player["Kingdom"].Offset })
+	AddKingdomStateFields(kingdomNode, instanceAddress + Player["Kingdom"].Offset)
 
 
 	--pointers for testing
