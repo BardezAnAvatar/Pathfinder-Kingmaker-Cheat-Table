@@ -44,6 +44,8 @@ local function GenerateKingmakerStructureDefinitions()
 	PersistentState = GetFields('Kingmaker', 'PersistentState', false)
 	GlobalMapState = GetFields('Kingmaker.Globalmap.State', 'GlobalMapState', false)
 	KingdomState = GetFields('Kingmaker.Kingdom', 'KingdomState', false)
+	KingdomStats = GetFields('Kingmaker.Kingdom', 'KingdomStats', false)
+	KingdomStat = GetFields('Kingmaker.Kingdom.KingdomStats', 'Stat', false)
 
 	----DEBUG:
 	--for key, value in pairs(KingdomState) do
