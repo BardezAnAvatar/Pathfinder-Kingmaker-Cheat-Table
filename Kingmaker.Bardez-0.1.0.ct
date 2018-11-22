@@ -133,6 +133,8 @@ end
 --    instanceAddress: memory address of the parent class
 local function AddGlobalMapStateFields(instanceNode, instanceAddress)
 	--reasonably editable data fields
+	AddChildToParentAddressView(instanceNode, false, false, "Miles Traveled", "+0x" .. string.format('%x', GlobalMapState["&lt;MilesTravelled&gt;k__BackingField"].Offset), vtSingle)
+	AddChildToParentAddressView(instanceNode, false, false, "Next Encounter at {value} Miles Traveled", "+0x" .. string.format('%x', GlobalMapState["&lt;NextEncounterRollMiles&gt;k__BackingField"].Offset), vtSingle)
 	AddChildToParentAddressView(instanceNode, false, false, "Speed Modifier", "+0x" .. string.format('%x', GlobalMapState["&lt;SpeedModifier&gt;k__BackingField"].Offset), vtSingle)
 	AddChildToParentAddressView(instanceNode, false, false, "Speed Modifier (in claimed Regions)", "+0x" .. string.format('%x', GlobalMapState["&lt;KingdomSpeedModifier&gt;k__BackingField"].Offset), vtSingle)
 end
