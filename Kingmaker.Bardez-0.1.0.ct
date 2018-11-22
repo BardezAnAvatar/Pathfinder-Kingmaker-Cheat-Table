@@ -38,14 +38,15 @@ end
 
 --function to regesister the structures necessary as global variables
 local function GenerateKingmakerStructureDefinitions()
-	Player = GetFields('Kingmaker', 'Player', false)
-	Game = GetFields('Kingmaker', 'Game', false)
-	PersistentState = GetFields('Kingmaker', 'PersistentState', false)
 	GameStatic = GetFields('Kingmaker', 'Game', true)
+	Game = GetFields('Kingmaker', 'Game', false)
+	Player = GetFields('Kingmaker', 'Player', false)
+	PersistentState = GetFields('Kingmaker', 'PersistentState', false)
 	GlobalMapState = GetFields('Kingmaker.Globalmap.State', 'GlobalMapState', false)
+	KingdomState = GetFields('Kingmaker.Kingdom', 'KingdomState', false)
 
 	----DEBUG:
-	--for key, value in pairs(GlobalMapState) do
+	--for key, value in pairs(KingdomState) do
 	--	print("name: " .. value.Name)
 	--end
 end
