@@ -98,7 +98,7 @@ local addressList = getAddressList()
 --                   vtGrouped=14
 --    dropDownList: an array(?) of values and displayable text for each value; nil if not intended to be populated
 --    childOffSetCount: Integer value to set the child's `OffsetCount` to
---    childOffsets: Integer Array values to set the child's `Offset` array to
+--    childOffsets: Integer Array values to set the child's `Offset` array to. NOTE: This implicitly turns the value into a pointer!
 local function AddChildToParentAddressView(parentAddressEntry, childIsHeader, collapsable, childName, childAddress, childType, dropDownList, childOffSetCount, childOffsets)
 	local child = addressList.createMemoryRecord()
 	child.isGroupHeader = childIsHeader
@@ -112,7 +112,7 @@ local function AddChildToParentAddressView(parentAddressEntry, childIsHeader, co
 
 	if (childOffsets ~= nil) then
 		child.OffsetCount = childOffSetCount
-		for index = 1, childOffSetCount do --apparently from 0 to 0 executes once. But from 1 to 0 does not.
+		for index = 0, childOffSetCount - 1 do
 			child.Offset[index] = childOffsets[index]
 		end
 	end
