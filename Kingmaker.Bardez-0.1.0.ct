@@ -42,6 +42,12 @@ local function GenerateKingmakerStructureDefinitions()
 	Game = GetFields('Kingmaker', 'Game', false)
 	PersistentState = GetFields('Kingmaker', 'PersistentState', false)
 	GameStatic = GetFields('Kingmaker', 'Game', true)
+	GlobalMapState = GetFields('Kingmaker.Globalmap.State', 'GlobalMapState', false)
+
+	----DEBUG:
+	--for key, value in pairs(GlobalMapState) do
+	--	print("name: " .. value.Name)
+	--end
 end
 
 
@@ -115,6 +121,17 @@ end
 
 
 --function to add all of the child fields of `Kingmaker.Player` to an added instance address node
+--params:
+--    instanceNode: AddressList node that is the parent of the fields
+--    instanceAddress: memory address of the parent class
+local function AddGlobalMapStateFields(instanceNode, instanceAddress)
+	--reasonably editable data fields
+	AddChildToParentAddressView(instanceNode, false, "Speed Modifier", "+0x" .. string.format('%x', GlobalMapState["&lt;SpeedModifier&gt;k__BackingField"].Offset), 0, {}, vtSingle)
+	AddChildToParentAddressView(instanceNode, false, "Speed Modifier (in claimed Regions)", "+0x" .. string.format('%x', GlobalMapState["&lt;KingdomSpeedModifier&gt;k__BackingField"].Offset), 0, {}, vtSingle)
+end
+
+
+--function to add all of the child fields of `Kingmaker.Player` to an added instance address node
 local function AddPlayerFields(instanceNode, instanceAddress)
 	--reasonably editable data fields
 	AddChildToParentAddressView(instanceNode, false, "Money", "+0x" .. string.format('%x', Player["&lt;Money&gt;k__BackingField"].Offset), 0, {}, vtQword)
@@ -131,6 +148,11 @@ local function AddPlayerFields(instanceNode, instanceAddress)
 	AddChildToParentAddressView(instanceNode, false, "Encumbrance", "+0x" .. string.format('%x', Player["&lt;Encumbrance&gt;k__BackingField"].Offset), 0, {}, vtDword, encumbrance)  --Kingmaker.UnitLogic.Encumbrance  (Int32 enum)
 
 
+	--pointers to real, relevant classes
+	local globalMapNode = AddChildToParentAddressView(instanceNode, false, "Global Map (World Map)", "+0x" .. string.format('%x', Player["m_GlobalMap"].Offset), 0, {}, vtQword)
+	AddGlobalMapStateFields(globalMapNode, instanceAddress + Player["m_GlobalMap"].Offset)
+
+
 	--pointers for testing
 	AddChildToParentAddressView(instanceNode, false, "CrossSceneState", "+0x" .. string.format('%x', Player["CrossSceneState"].Offset), 0, {}, vtQword)
 	AddChildToParentAddressView(instanceNode, false, "Dialog State", "+0x" .. string.format('%x', Player["m_Dialog"].Offset), 0, {}, vtQword)
@@ -139,6 +161,7 @@ local function AddPlayerFields(instanceNode, instanceAddress)
 	AddChildToParentAddressView(instanceNode, false, "m_MainCharacter", "+0x" .. string.format('%x', Player["m_MainCharacter"].Offset), 0, {}, vtQword)
 	AddChildToParentAddressView(instanceNode, false, "&lt;Inventory&gt;k__BackingField", "+0x" .. string.format('%x', Player["&lt;Inventory&gt;k__BackingField"].Offset), 0, {}, vtQword)
 	AddChildToParentAddressView(instanceNode, false, "Achievements", "+0x" .. string.format('%x', Player["Achievements"].Offset), 0, {}, vtQword)
+
 
 
 	--AddChildToParentAddressView(instanceNode, false, "Found `Kingmaker.Player` Instance", instanceAddress, 0, {}, vtPointer)
