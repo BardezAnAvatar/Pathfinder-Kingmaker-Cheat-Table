@@ -156,7 +156,7 @@ local function AddPlayerFields(instanceNode, instanceAddress)
 
 
 	--pointers to real, relevant classes
-	local globalMapNode = AddChildToParentAddressView(instanceNode, false, false, "Global Map (World Map)", "+0x" .. string.format('%x', Player["m_GlobalMap"].Offset), vtQword)
+	local globalMapNode = AddChildToParentAddressView(instanceNode, false, true, "Global Map (World Map)", "+0x" .. string.format('%x', Player["m_GlobalMap"].Offset), vtQword)
 	AddGlobalMapStateFields(globalMapNode, instanceAddress + Player["m_GlobalMap"].Offset)
 
 
