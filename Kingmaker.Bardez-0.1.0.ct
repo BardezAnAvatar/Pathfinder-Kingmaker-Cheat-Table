@@ -154,6 +154,25 @@ local function AddGlobalMapStateFields(instanceNode, instanceAddress)
 end
 
 
+--function to add all of the child fields of `Kingmaker.Kingdom.KingdomState` to an added instance address node
+--params:
+--    instanceNode: AddressList node that is the parent of the fields
+--    instanceAddress: memory address of the parent class
+local function AddKingdomStateFields(instanceNode, instanceAddress)
+	--reasonably editable data fields
+	AddChildToParentAddressView(instanceNode, false, false, "Kingdom Name", "+0x" .. string.format('%x', KingdomState["KingdomName"].Offset), vtString)
+	AddChildToParentAddressView(instanceNode, false, false, "Alignment", "+0x" .. string.format('%x', KingdomState["Alignment"].Offset), vtDword, nil, 1, alignment)
+	AddChildToParentAddressView(instanceNode, false, false, "Current Turn #", "+0x" .. string.format('%x', KingdomState["CurrentTurn"].Offset), vtDword)
+	AddChildToParentAddressView(instanceNode, false, false, "BP", "+0x" .. string.format('%x', KingdomState["BP"].Offset), vtDword)
+	AddChildToParentAddressView(instanceNode, false, false, "BP per turn", "+0x" .. string.format('%x', KingdomState["BPPerTurn"].Offset), vtDword)
+
+	--Raven crap
+	AddChildToParentAddressView(instanceNode, false, false, "Last Raven Visit Day", "+0x" .. string.format('%x', KingdomState["LastRavenVisitDay"].Offset), vtDword)
+	AddChildToParentAddressView(instanceNode, false, false, "BP on Last Raven Visit", "+0x" .. string.format('%x', KingdomState["BPOnLastRavenVisit"].Offset), vtDword)
+
+end
+
+
 --function to add all of the child fields of `Kingmaker.Player` to an added instance address node
 --params:
 --    instanceNode: AddressList node that is the parent of the fields
