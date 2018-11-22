@@ -128,14 +128,28 @@ local function AddChildToParentAddressView(parentAddressEntry, childIsHeader, co
 	child.Address = childAddress
 	child.Type = childType
 	
+	if (childType == vtString) then
+		childOffSetCount = 1
+		childOffsets = { "0x14" }
+
+		local parentEffectiveAddress = parentAddressEntry.getCurrentAddress()
+		local stringFieldAddress = string.format('%x', parentEffectiveAddress) .. childAddress -- using an implied "+" based on usage. TODO: make this smarter.
+		local stringAddress = string.format('%x', readPointer(stringFieldAddress))
+		local sizeAddress = stringAddress .. "+0x10"
+		local stringLength = readInteger(sizeAddress)
+
+		child.String.Size = stringLength
+		child.String.Unicode = 1
+	end
+
 	if (collapsable) then
 		child.options = "[moManualExpandCollapse]" 
 	end
 
 	if (childOffsets ~= nil) then
 		child.OffsetCount = childOffSetCount
-		for index = 0, childOffSetCount - 1 do
-			child.Offset[index] = childOffsets[index]
+		for index = 1, childOffSetCount do
+			child.Offset[index-1] = childOffsets[index]
 		end
 	end
 
@@ -205,7 +219,7 @@ local function AddPlayerFields(instanceNode, instanceAddress)
 	AddChildToParentAddressView(instanceNode, false, false, "Money", "+0x" .. string.format('%x', Player["&lt;Money&gt;k__BackingField"].Offset), vtQword)
 	AddChildToParentAddressView(instanceNode, false, false, "Current Formation Index", "+0x" .. string.format('%x', Player["m_CurrentFormationIndex"].Offset), vtDword)
 	AddChildToParentAddressView(instanceNode, false, false, "Chapter", "+0x" .. string.format('%x', Player["Chapter"].Offset), vtDword)
-	AddChildToParentAddressView(instanceNode, false, false, "Game ID", "+0x" .. string.format('%x', Player["&lt;GameId&gt;k__BackingField"].Offset), vtQword)
+	AddChildToParentAddressView(instanceNode, false, false, "Game ID", "+0x" .. string.format('%x', Player["&lt;GameId&gt;k__BackingField"].Offset), vtString)
 	AddChildToParentAddressView(instanceNode, false, false, "GameTime", "+0x" .. string.format('%x', Player["GameTime"].Offset), vtQword)  --System.TimeSpan
 	AddChildToParentAddressView(instanceNode, false, false, "RealTime", "+0x" .. string.format('%x', Player["RealTime"].Offset), vtQword)  --System.TimeSpan
 
@@ -217,9 +231,9 @@ local function AddPlayerFields(instanceNode, instanceAddress)
 
 
 	--pointers to real, relevant classes
-	local globalMapNode = AddChildToParentAddressView(instanceNode, false, true, "Global Map (World Map)", "+0x" .. string.format('%x', Player["m_GlobalMap"].Offset), vtQword, nil, 1, { Player["m_GlobalMap"].Offset })
+	local globalMapNode = AddChildToParentAddressView(instanceNode, false, true, "Global Map (World Map)", "+0x" .. string.format('%x', Player["m_GlobalMap"].Offset), vtQword, nil, 1, { 0 })
 	AddGlobalMapStateFields(globalMapNode, instanceAddress + Player["m_GlobalMap"].Offset)
-	local kingdomNode = AddChildToParentAddressView(instanceNode, false, true, "Kingdom", "+0x" .. string.format('%x', Player["Kingdom"].Offset), vtQword, nil, 1, { Player["Kingdom"].Offset })
+	local kingdomNode = AddChildToParentAddressView(instanceNode, false, true, "Kingdom", "+0x" .. string.format('%x', Player["Kingdom"].Offset), vtQword, nil, 1, { 0 })
 	AddKingdomStateFields(kingdomNode, instanceAddress + Player["Kingdom"].Offset)
 
 
