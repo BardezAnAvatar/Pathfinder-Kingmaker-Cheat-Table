@@ -74,7 +74,7 @@ GenerateKingmakerStructureDefinitions()
 local playerParentEntry = "Kingmaker.Player (active game)"
 
 --Kingmaker.Enums.Alignment
-local alignment = [[1:True Neutral 
+local alignmentEnum = [[1:True Neutral 
 3:Neutral Good
 5:Neutral Evil
 9:Lawful Neutral
@@ -82,7 +82,15 @@ local alignment = [[1:True Neutral
 12:Lawful Evil
 17:Chaotic Neutral
 18:Chaotic Good
-20:Chaotic Evil]] 
+20:Chaotic Evil]]
+
+--Kingmaker.Enums.Alignment
+local kingdomUnrestEnum = [[0:Crumbling
+1:Unrest/Riots
+2:Troubled
+3:Worried
+4:Stable
+5:"Metastable"/Serene (debug value?)]]
 
 --used everywhere
 local addressList = getAddressList()
@@ -161,7 +169,7 @@ end
 local function AddKingdomStateFields(instanceNode, instanceAddress)
 	--reasonably editable data fields
 	AddChildToParentAddressView(instanceNode, false, false, "Kingdom Name", "+0x" .. string.format('%x', KingdomState["KingdomName"].Offset), vtString)
-	AddChildToParentAddressView(instanceNode, false, false, "Alignment", "+0x" .. string.format('%x', KingdomState["Alignment"].Offset), vtDword, nil, 1, alignment)
+	AddChildToParentAddressView(instanceNode, false, false, "Alignment", "+0x" .. string.format('%x', KingdomState["Alignment"].Offset), vtDword, nil, 1, alignmentEnum)
 	AddChildToParentAddressView(instanceNode, false, false, "Current Turn #", "+0x" .. string.format('%x', KingdomState["CurrentTurn"].Offset), vtDword)
 	AddChildToParentAddressView(instanceNode, false, false, "BP", "+0x" .. string.format('%x', KingdomState["BP"].Offset), vtDword)
 	AddChildToParentAddressView(instanceNode, false, false, "BP per turn", "+0x" .. string.format('%x', KingdomState["BPPerTurn"].Offset), vtDword)
