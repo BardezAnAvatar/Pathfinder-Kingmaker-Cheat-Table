@@ -74,7 +74,7 @@ GenerateKingmakerStructureDefinitions()
 local playerParentEntry = "Kingmaker.Player (active game)"
 
 --Kingmaker.Enums.Alignment
-local alignmentEnum = [[1:True Neutral 
+local alignmentEnum = [[1:True Neutral
 3:Neutral Good
 5:Neutral Evil
 9:Lawful Neutral
@@ -127,7 +127,7 @@ local function AddChildToParentAddressView(parentAddressEntry, childIsHeader, co
 	child.Description = childName
 	child.Address = childAddress
 	child.Type = childType
-	
+
 	if (childType == vtString) then
 		childOffSetCount = 1
 		childOffsets = { "0x14" }
@@ -143,7 +143,7 @@ local function AddChildToParentAddressView(parentAddressEntry, childIsHeader, co
 	end
 
 	if (collapsable) then
-		child.options = "[moManualExpandCollapse]" 
+		child.options = "[moManualExpandCollapse]"
 	end
 
 	if (childOffsets ~= nil) then
@@ -223,10 +223,10 @@ local function AddPlayerFields(instanceNode, instanceAddress)
 	AddChildToParentAddressView(instanceNode, false, false, "GameTime", "+0x" .. string.format('%x', Player["GameTime"].Offset), vtQword)  --System.TimeSpan
 	AddChildToParentAddressView(instanceNode, false, false, "RealTime", "+0x" .. string.format('%x', Player["RealTime"].Offset), vtQword)  --System.TimeSpan
 
-	local encumbrance = [[0:Light 
+	local encumbrance = [[0:Light
 1:Medium
 2:Heavy
-3:Overencumbered]] 
+3:Overencumbered]]
 	AddChildToParentAddressView(instanceNode, false, false, "Encumbrance", "+0x" .. string.format('%x', Player["&lt;Encumbrance&gt;k__BackingField"].Offset), vtDword, encumbrance)  --Kingmaker.UnitLogic.Encumbrance  (Int32 enum)
 
 
@@ -275,7 +275,7 @@ local function FindKingmakerPlayerAddresses()
 	header.Description = playerParentEntry
 	--header.isGroupHeader = true
 	header.Address = instanceStatePlayerPointer
-	header.options = "[moManualExpandCollapse]" 
+	header.options = "[moManualExpandCollapse]"
 
 	AddKingmakerPlayerAddress(instanceStatePlayerPointer)
 end
