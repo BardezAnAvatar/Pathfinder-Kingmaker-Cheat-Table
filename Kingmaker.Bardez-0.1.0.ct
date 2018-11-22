@@ -78,6 +78,7 @@ local addressList = getAddressList()
 --params:
 --    parentAddressEntry: MemoryRecord to append to
 --    childIsHeader: Boolean value to set the child's `isGroupHeader` to
+--    collapsable: Boolean value indicating whether the user should be able to collapse the address or not
 --    childName: String value to set the child's `Description` to
 --    childAddress: Integer value to set the child's `Address` to
 --    childType: Integer; one of the following defined global constants:
@@ -98,12 +99,16 @@ local addressList = getAddressList()
 --    dropDownList: an array(?) of values and displayable text for each value; nil if not intended to be populated
 --    childOffSetCount: Integer value to set the child's `OffsetCount` to
 --    childOffsets: Integer Array values to set the child's `Offset` array to
-local function AddChildToParentAddressView(parentAddressEntry, childIsHeader, childName, childAddress, childType, dropDownList, childOffSetCount, childOffsets)
+local function AddChildToParentAddressView(parentAddressEntry, childIsHeader, collapsable, childName, childAddress, childType, dropDownList, childOffSetCount, childOffsets)
 	local child = addressList.createMemoryRecord()
 	child.isGroupHeader = childIsHeader
 	child.Description = childName
 	child.Address = childAddress
 	child.Type = childType
+	
+	if (collapsable) then
+		child.options = "[moManualExpandCollapse]" 
+	end
 
 	if (childOffsets ~= nil) then
 		child.OffsetCount = childOffSetCount
@@ -128,41 +133,41 @@ end
 --    instanceAddress: memory address of the parent class
 local function AddGlobalMapStateFields(instanceNode, instanceAddress)
 	--reasonably editable data fields
-	AddChildToParentAddressView(instanceNode, false, "Speed Modifier", "+0x" .. string.format('%x', GlobalMapState["&lt;SpeedModifier&gt;k__BackingField"].Offset), vtSingle)
-	AddChildToParentAddressView(instanceNode, false, "Speed Modifier (in claimed Regions)", "+0x" .. string.format('%x', GlobalMapState["&lt;KingdomSpeedModifier&gt;k__BackingField"].Offset), vtSingle)
+	AddChildToParentAddressView(instanceNode, false, false, "Speed Modifier", "+0x" .. string.format('%x', GlobalMapState["&lt;SpeedModifier&gt;k__BackingField"].Offset), vtSingle)
+	AddChildToParentAddressView(instanceNode, false, false, "Speed Modifier (in claimed Regions)", "+0x" .. string.format('%x', GlobalMapState["&lt;KingdomSpeedModifier&gt;k__BackingField"].Offset), vtSingle)
 end
 
 
 --function to add all of the child fields of `Kingmaker.Player` to an added instance address node
 local function AddPlayerFields(instanceNode, instanceAddress)
 	--reasonably editable data fields
-	AddChildToParentAddressView(instanceNode, false, "Money", "+0x" .. string.format('%x', Player["&lt;Money&gt;k__BackingField"].Offset), vtQword)
-	AddChildToParentAddressView(instanceNode, false, "Current Formation Index", "+0x" .. string.format('%x', Player["m_CurrentFormationIndex"].Offset), vtDword)
-	AddChildToParentAddressView(instanceNode, false, "Chapter", "+0x" .. string.format('%x', Player["Chapter"].Offset), vtDword)
-	AddChildToParentAddressView(instanceNode, false, "Game ID", "+0x" .. string.format('%x', Player["&lt;GameId&gt;k__BackingField"].Offset), vtQword)
-	AddChildToParentAddressView(instanceNode, false, "GameTime", "+0x" .. string.format('%x', Player["GameTime"].Offset), vtQword)  --System.TimeSpan
-	AddChildToParentAddressView(instanceNode, false, "RealTime", "+0x" .. string.format('%x', Player["RealTime"].Offset), vtQword)  --System.TimeSpan
+	AddChildToParentAddressView(instanceNode, false, false, "Money", "+0x" .. string.format('%x', Player["&lt;Money&gt;k__BackingField"].Offset), vtQword)
+	AddChildToParentAddressView(instanceNode, false, false, "Current Formation Index", "+0x" .. string.format('%x', Player["m_CurrentFormationIndex"].Offset), vtDword)
+	AddChildToParentAddressView(instanceNode, false, false, "Chapter", "+0x" .. string.format('%x', Player["Chapter"].Offset), vtDword)
+	AddChildToParentAddressView(instanceNode, false, false, "Game ID", "+0x" .. string.format('%x', Player["&lt;GameId&gt;k__BackingField"].Offset), vtQword)
+	AddChildToParentAddressView(instanceNode, false, false, "GameTime", "+0x" .. string.format('%x', Player["GameTime"].Offset), vtQword)  --System.TimeSpan
+	AddChildToParentAddressView(instanceNode, false, false, "RealTime", "+0x" .. string.format('%x', Player["RealTime"].Offset), vtQword)  --System.TimeSpan
 
 	local encumbrance = [[0:Light 
 1:Medium
 2:Heavy
 3:Overencumbered]] 
-	AddChildToParentAddressView(instanceNode, false, "Encumbrance", "+0x" .. string.format('%x', Player["&lt;Encumbrance&gt;k__BackingField"].Offset), vtDword, encumbrance)  --Kingmaker.UnitLogic.Encumbrance  (Int32 enum)
+	AddChildToParentAddressView(instanceNode, false, false, "Encumbrance", "+0x" .. string.format('%x', Player["&lt;Encumbrance&gt;k__BackingField"].Offset), vtDword, encumbrance)  --Kingmaker.UnitLogic.Encumbrance  (Int32 enum)
 
 
 	--pointers to real, relevant classes
-	local globalMapNode = AddChildToParentAddressView(instanceNode, false, "Global Map (World Map)", "+0x" .. string.format('%x', Player["m_GlobalMap"].Offset), vtQword)
+	local globalMapNode = AddChildToParentAddressView(instanceNode, false, false, "Global Map (World Map)", "+0x" .. string.format('%x', Player["m_GlobalMap"].Offset), vtQword)
 	AddGlobalMapStateFields(globalMapNode, instanceAddress + Player["m_GlobalMap"].Offset)
 
 
 	--pointers for testing
-	AddChildToParentAddressView(instanceNode, false, "CrossSceneState", "+0x" .. string.format('%x', Player["CrossSceneState"].Offset), vtQword)
-	AddChildToParentAddressView(instanceNode, false, "Dialog State", "+0x" .. string.format('%x', Player["m_Dialog"].Offset), vtQword)
-	AddChildToParentAddressView(instanceNode, false, "Kingdom", "+0x" .. string.format('%x', Player["Kingdom"].Offset), vtQword)
-	AddChildToParentAddressView(instanceNode, false, "Shared Stash", "+0x" .. string.format('%x', Player["SharedStash"].Offset), vtQword)
-	AddChildToParentAddressView(instanceNode, false, "m_MainCharacter", "+0x" .. string.format('%x', Player["m_MainCharacter"].Offset), vtQword)
-	AddChildToParentAddressView(instanceNode, false, "&lt;Inventory&gt;k__BackingField", "+0x" .. string.format('%x', Player["&lt;Inventory&gt;k__BackingField"].Offset), vtQword)
-	AddChildToParentAddressView(instanceNode, false, "Achievements", "+0x" .. string.format('%x', Player["Achievements"].Offset), vtQword)
+	AddChildToParentAddressView(instanceNode, false, false, "CrossSceneState", "+0x" .. string.format('%x', Player["CrossSceneState"].Offset), vtQword)
+	AddChildToParentAddressView(instanceNode, false, false, "Dialog State", "+0x" .. string.format('%x', Player["m_Dialog"].Offset), vtQword)
+	AddChildToParentAddressView(instanceNode, false, false, "Kingdom", "+0x" .. string.format('%x', Player["Kingdom"].Offset), vtQword)
+	AddChildToParentAddressView(instanceNode, false, false, "Shared Stash", "+0x" .. string.format('%x', Player["SharedStash"].Offset), vtQword)
+	AddChildToParentAddressView(instanceNode, false, false, "m_MainCharacter", "+0x" .. string.format('%x', Player["m_MainCharacter"].Offset), vtQword)
+	AddChildToParentAddressView(instanceNode, false, false, "&lt;Inventory&gt;k__BackingField", "+0x" .. string.format('%x', Player["&lt;Inventory&gt;k__BackingField"].Offset), vtQword)
+	AddChildToParentAddressView(instanceNode, false, false, "Achievements", "+0x" .. string.format('%x', Player["Achievements"].Offset), vtQword)
 end
 
 
