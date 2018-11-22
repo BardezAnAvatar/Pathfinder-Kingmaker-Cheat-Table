@@ -141,7 +141,7 @@ local function AddChildToParentAddressView(parentAddressEntry, childIsHeader, co
 end
 
 
---function to add all of the child fields of `Kingmaker.Player` to an added instance address node
+--function to add all of the child fields of `Kingmaker.Globalmap.State.GlobalMapState` to an added instance address node
 --params:
 --    instanceNode: AddressList node that is the parent of the fields
 --    instanceAddress: memory address of the parent class
