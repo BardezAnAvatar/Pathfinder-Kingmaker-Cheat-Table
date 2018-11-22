@@ -161,18 +161,6 @@ local function AddPlayerFields(instanceNode, instanceAddress)
 	AddChildToParentAddressView(instanceNode, false, "m_MainCharacter", "+0x" .. string.format('%x', Player["m_MainCharacter"].Offset), 0, {}, vtQword)
 	AddChildToParentAddressView(instanceNode, false, "&lt;Inventory&gt;k__BackingField", "+0x" .. string.format('%x', Player["&lt;Inventory&gt;k__BackingField"].Offset), 0, {}, vtQword)
 	AddChildToParentAddressView(instanceNode, false, "Achievements", "+0x" .. string.format('%x', Player["Achievements"].Offset), 0, {}, vtQword)
-
-
-
-	--AddChildToParentAddressView(instanceNode, false, "Found `Kingmaker.Player` Instance", instanceAddress, 0, {}, vtPointer)
-	--AddChildToParentAddressView(instanceNode, false, "Found `Kingmaker.Player` Instance", instanceAddress, 0, {}, vtPointer)
-	--AddChildToParentAddressView(instanceNode, false, "Found `Kingmaker.Player` Instance", instanceAddress, 0, {}, vtPointer)
-	--AddChildToParentAddressView(instanceNode, false, "Found `Kingmaker.Player` Instance", instanceAddress, 0, {}, vtPointer)
-	--AddChildToParentAddressView(instanceNode, false, "Found `Kingmaker.Player` Instance", instanceAddress, 0, {}, vtPointer)
-	--AddChildToParentAddressView(instanceNode, false, "Found `Kingmaker.Player` Instance", instanceAddress, 0, {}, vtPointer)
-	--AddChildToParentAddressView(instanceNode, false, "Found `Kingmaker.Player` Instance", instanceAddress, 0, {}, vtPointer)
-	--AddChildToParentAddressView(instanceNode, false, "Found `Kingmaker.Player` Instance", instanceAddress, 0, {}, vtPointer)
-	--AddChildToParentAddressView(instanceNode, false, "Found `Kingmaker.Player` Instance", instanceAddress, 0, {}, vtPointer)
 end
 
 
