@@ -270,6 +270,12 @@ local function AddKingdomStateFields(instanceNode)
 	--Kingdom Stats
 	local statsNode = AddChildToParentAddressView(instanceNode, false, true, true, "Stats", "+0x" .. string.format('%x', KingdomState["Stats"].Offset), vtQword, nil, 1, { 0 })
 	AddKingdomStateStatsFields(statsNode)
+
+	--Events
+	local eventsNode = AddChildToParentAddressView(instanceNode, false, true, true, "Active Events", "+0x" .. string.format('%x', KingdomState["ActiveEvents"].Offset), vtQword, nil, 1, { 0 })
+
+	--Tasks
+	local eventsNode = AddChildToParentAddressView(instanceNode, false, true, true, "Active Tasks", "+0x" .. string.format('%x', KingdomState["ActiveTasks"].Offset), vtQword, nil, 1, { 0 })
 end
 
 
