@@ -38,6 +38,7 @@ end
 
 --function to regesister the structures necessary as global variables
 local function GenerateKingmakerStructureDefinitions()
+	SystemString = GetFields('System', 'String', false)
 	GameStatic = GetFields('Kingmaker', 'Game', true)
 	Game = GetFields('Kingmaker', 'Game', false)
 	Player = GetFields('Kingmaker', 'Player', false)
@@ -48,7 +49,7 @@ local function GenerateKingmakerStructureDefinitions()
 	KingdomStat = GetFields('Kingmaker.Kingdom.KingdomStats', 'Stat', false)
 
 	----DEBUG:
-	--for key, value in pairs(KingdomState) do
+	--for key, value in pairs(SystemString) do
 	--	print("name: " .. value.Name)
 	--end
 end
@@ -104,7 +105,7 @@ local addressList = getAddressList()
 --    childIsHeader: Boolean value to set the child's `isGroupHeader` to
 --    collapsable: Boolean value indicating whether the user should be able to collapse the address or not
 --    childName: String value to set the child's `Description` to
---    childAddress: Integer value to set the child's `Address` to
+--    childAddress: Integer value to set the child's `Address` to. Presumed to be an offset (e.g: `+0xDEADBEEF`)
 --    childType: Integer; one of the following defined global constants:
 --                   vtByte=0
 --                   vtWord=1
@@ -131,17 +132,18 @@ local function AddChildToParentAddressView(parentAddressEntry, childIsHeader, co
 	child.Type = childType
 
 	if (childType == vtString) then
-		childOffSetCount = 1
-		childOffsets = { "0x14" }
-
 		local parentEffectiveAddress = parentAddressEntry.getCurrentAddress()
-		local stringFieldAddress = string.format('%x', parentEffectiveAddress) .. childAddress -- using an implied "+" based on usage. TODO: make this smarter.
+		local stringFieldAddress = string.format('%x', parentEffectiveAddress) .. childAddress -- using an implied "+" as part of the format of `childAddress` based on usage pattern. TODO: make this smarter.
 		local stringAddress = string.format('%x', readPointer(stringFieldAddress))
-		local sizeAddress = stringAddress .. "+0x10"
+		local sizeAddress = stringAddress .. "+0x" .. string.format('%x', SystemString["m_stringLength"].Offset)
 		local stringLength = readInteger(sizeAddress)
 
 		child.String.Size = stringLength
 		child.String.Unicode = 1
+
+		--make this a pointer
+		childOffSetCount = 1
+		childOffsets = { "0x" .. string.format('%x', SystemString["m_firstChar"].Offset) }
 	end
 
 	if (collapsable) then
