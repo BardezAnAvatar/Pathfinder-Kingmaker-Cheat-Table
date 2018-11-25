@@ -219,6 +219,8 @@ local function AddKingdomStatFields(arrayAddress, addressOffset, parentNode)
 	local relativeAddress = string.format('%x', statMemoryAddress).. "+0x" .. string.format('%x', KingdomStat["Type"].Offset)
 	local statType = readInteger(relativeAddress)
 	local statParent = AddChildToParentAddressView(parentNode, false, false, true, valueMappingTable[statType], "+0x" .. string.format('%x', KingdomStats["m_Stats"].Offset), vtQword, nil, 2, { 0, addressOffset })
+	AddChildToParentAddressView(statParent, false, false, false, "Value", "+0x" .. string.format('%x', KingdomStat["Value"].Offset), vtDword)
+	AddChildToParentAddressView(statParent, false, false, false, "Rank", "+0x" .. string.format('%x', KingdomStat["Rank"].Offset), vtDword)
 
 	return addressOffset + 8	--really should use IntPtr.Size, but I mean... it's 64-bit, so it's 8.
 end
