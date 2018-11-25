@@ -168,8 +168,7 @@ end
 --function to add all of the child fields of `Kingmaker.Globalmap.State.GlobalMapState` to an added instance address node
 --params:
 --    instanceNode: AddressList node that is the parent of the fields
---    instanceAddress: memory address of the parent class
-local function AddGlobalMapStateFields(instanceNode, instanceAddress)
+local function AddGlobalMapStateFields(instanceNode)
 	--reasonably editable data fields
 	AddChildToParentAddressView(instanceNode, false, false, "Miles Traveled", "+0x" .. string.format('%x', GlobalMapState["&lt;MilesTravelled&gt;k__BackingField"].Offset), vtSingle)
 	AddChildToParentAddressView(instanceNode, false, false, "Next Encounter at {value} Miles Traveled (outside of claimed Regions?)", "+0x" .. string.format('%x', GlobalMapState["&lt;NextEncounterRollMiles&gt;k__BackingField"].Offset), vtSingle)
@@ -188,8 +187,7 @@ end
 --function to add all of the child fields of `Kingmaker.Kingdom.KingdomState` to an added instance address node
 --params:
 --    instanceNode: AddressList node that is the parent of the fields
---    instanceAddress: memory address of the parent class
-local function AddKingdomStateFields(instanceNode, instanceAddress)
+local function AddKingdomStateFields(instanceNode)
 	--reasonably editable data fields
 	AddChildToParentAddressView(instanceNode, false, false, "Kingdom Name", "+0x" .. string.format('%x', KingdomState["KingdomName"].Offset), vtString)
 	AddChildToParentAddressView(instanceNode, false, false, "Alignment", "+0x" .. string.format('%x', KingdomState["Alignment"].Offset), vtDword, alignmentEnum)
@@ -225,8 +223,7 @@ end
 --function to add all of the child fields of `Kingmaker.Player` to an added instance address node
 --params:
 --    instanceNode: AddressList node that is the parent of the fields
---    instanceAddress: memory address of the parent class
-local function AddPlayerFields(instanceNode, instanceAddress)
+local function AddPlayerFields(instanceNode)
 	--reasonably editable data fields
 	AddChildToParentAddressView(instanceNode, false, false, "Money", "+0x" .. string.format('%x', Player["&lt;Money&gt;k__BackingField"].Offset), vtQword)
 	AddChildToParentAddressView(instanceNode, false, false, "Current Formation Index", "+0x" .. string.format('%x', Player["m_CurrentFormationIndex"].Offset), vtDword)
@@ -244,9 +241,9 @@ local function AddPlayerFields(instanceNode, instanceAddress)
 
 	--pointers to real, relevant classes
 	local globalMapNode = AddChildToParentAddressView(instanceNode, false, true, "Global Map (World Map)", "+0x" .. string.format('%x', Player["m_GlobalMap"].Offset), vtQword, nil, 1, { 0 })
-	AddGlobalMapStateFields(globalMapNode, instanceAddress + Player["m_GlobalMap"].Offset)
+	AddGlobalMapStateFields(globalMapNode)
 	local kingdomNode = AddChildToParentAddressView(instanceNode, false, true, "Kingdom", "+0x" .. string.format('%x', Player["Kingdom"].Offset), vtQword, nil, 1, { 0 })
-	AddKingdomStateFields(kingdomNode, instanceAddress + Player["Kingdom"].Offset)
+	AddKingdomStateFields(kingdomNode)
 
 
 	--pointers for testing
@@ -265,7 +262,7 @@ local function AddKingmakerPlayerAddress(address)
 	local parent = addressList.getMemoryRecordByDescription(playerParentEntry)
 
 	--attach a child
-	AddPlayerFields(parent, address)
+	AddPlayerFields(parent)
 end
 
 
