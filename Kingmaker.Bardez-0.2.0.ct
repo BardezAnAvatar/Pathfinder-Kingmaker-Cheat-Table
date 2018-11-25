@@ -212,7 +212,7 @@ local function AddKingdomStateFields(instanceNode)
 	--Raven crap
 	AddChildToParentAddressView(instanceNode, false, false, "Last Raven Visit Day", "+0x" .. string.format('%x', KingdomState["LastRavenVisitDay"].Offset), vtDword)
 	AddChildToParentAddressView(instanceNode, false, false, "BP on Last Raven Visit", "+0x" .. string.format('%x', KingdomState["BPOnLastRavenVisit"].Offset), vtDword)
-	AddChildToParentAddressView(instanceNode, false, false, "Unrest on Last Raven Visit", "+0x" .. string.format('%x', KingdomState["BPOnLastRavenVisit"].Offset), vtDword, kingdomUnrestEnum)
+	AddChildToParentAddressView(instanceNode, false, false, "Unrest on Last Raven Visit", "+0x" .. string.format('%x', KingdomState["UnrestOnLastRavenVisit"].Offset), vtDword, kingdomUnrestEnum)
 
 	--Kingdom Stats
 	local statsNode = AddChildToParentAddressView(instanceNode, false, true, "Stats", "+0x" .. string.format('%x', KingdomState["Stats"].Offset), vtQword, nil, 1, { 0 })
