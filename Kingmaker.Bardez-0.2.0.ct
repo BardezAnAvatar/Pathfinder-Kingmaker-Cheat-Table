@@ -179,10 +179,57 @@ local function AddGlobalMapStateFields(instanceNode)
 end
 
 
---function to add all of the child fields of `Kingmaker.Kingdom.KingdomState` to an added instance address node
+--function to read all items in a .NET array
+--params:
+--    address: address of the array to start reading at
+--    entryHandler: function to invoke, passing an address and returning an address, trusting that it is the address of the next array item
+--NOTE:
+--    This should work, whether the entries are literals, structs, or pointers
+local function ReadMonoArray(address, entryHandler, ...)
+	local arg = {...}  -- arg is now a table of all extra values passed to g 
+	local classId = mono_findClass("System", "Array")
+	local lengthMethodId = mono_class_findMethod(classId, "get_Length")
+	local arrayLength = mono_invoke_method(mono_enumDomains()[1], lengthMethodId, address, {})
+
+	local currentAddress = address + 32 --Magic number; apparently the first 0x20 bytes are Array Internals. I cannot see these in the dissect definitions :'(
+
+	for index = 0, arrayLength - 1 do
+		print("iteration " .. index)
+		currentAddress = entryHandler(currentAddress, unpack(arg))
+	end
+end
+
+
+--function to add all of the child fields of `Kingmaker.Kingdom.KingdomState.Stat` to an added instance address node
+--params:
+--    address: address inmemory of the current `Kingmaker.Kingdom.KingdomState.Stat`
+--    parentNode: AddressList node that is the parent of the stat
+local function AddKingdomStatFields(address, parentNode)
+	--constant table to lookup enum values
+	local valueMappingTable = { [0] = "Community", [1] = "Loyalty", [2] = "Military", [3] = "Economy", [4] = "Relations", [5] = "Divine", [6] = "Arcane", [7] = "Stability", [8] = "Culture", [9] = "Espionage" }
+	
+	
+	--read the type; this determines the label we give it.
+	print("Address of the current Stat entry: 0x" .. string.format('%x', address))
+	local statMemoryAddress = readPointer(address)
+	print("Stat instance address: 0x" .. string.format('%x', statMemoryAddress))
+	local relativeAddress = string.format('%x', statMemoryAddress).. "+0x" .. string.format('%x', KingdomStat["Type"].Offset)
+	local statType = readInteger(relativeAddress)
+	print("read stat type value: " .. statType)
+	local statParent = AddChildToParentAddressView(parentNode, false, false, valueMappingTable[statType], "0x" .. string.format('%x', statMemoryAddress), vtQword)
+	
+	return address + 8
+end
+
+
+--function to add all of the child fields of `Kingmaker.Kingdom.KingdomState.Stats` to an added instance address node
 --params:
 --    instanceNode: AddressList node that is the parent of the fields
 local function AddKingdomStateStatsFields(instanceNode)
+	local statsAddress = instanceNode.getCurrentAddress()
+	local relativeAddress = string.format('%x', statsAddress).. "+0x" .. string.format('%x', KingdomStats["m_Stats"].Offset)
+	local statsArrayAddress = readPointer(relativeAddress)
+	ReadMonoArray(statsArrayAddress, AddKingdomStatFields, instanceNode)
 end
 
 
@@ -218,7 +265,7 @@ local function AddKingdomStateFields(instanceNode)
 
 	--Kingdom Stats
 	local statsNode = AddChildToParentAddressView(instanceNode, false, true, "Stats", "+0x" .. string.format('%x', KingdomState["Stats"].Offset), vtQword, nil, 1, { 0 })
-	--AddKingdomStateStatsFields(statsNode)
+	AddKingdomStateStatsFields(statsNode)
 end
 
 
