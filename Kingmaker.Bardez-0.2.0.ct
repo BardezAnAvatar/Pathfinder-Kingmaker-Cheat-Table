@@ -77,6 +77,21 @@ local function GetPointerSize()
 end
 
 
+--function to read a System.String from memory and return it to a Lua variable
+--params:
+--    address: address in memory of the `System.String` instance
+local function ReadMonoStringFromAddress(address)
+	local formattedAddress = string.format('%x', address)
+
+	local sizeAddress = formattedAddress .. "+0x" .. string.format('%x', SystemString["m_stringLength"].Offset)
+	local stringLength = readInteger(sizeAddress)
+	local characterAddress = formattedAddress .. "+0x" .. string.format('%x', SystemString["m_firstChar"].Offset)
+	local value = readString(characterAddress, stringLength * 2, true)
+
+	return value
+end
+
+
 --load structure definitions
 GenerateKingmakerStructureDefinitions()
 
@@ -252,21 +267,6 @@ local function AddKingdomStatFields(arrayAddress, addressOffset, parentNode)
 	AddChildToParentAddressView(statParent, false, false, false, "Rank", "+0x" .. string.format('%x', KingdomStat["Rank"].Offset), vtDword)
 
 	return addressOffset + GetPointerSize()
-end
-
-
---function to read a System.String from memory and return it to a Lua variable
---params:
---    address: address in memory of the `System.String` instance
-local function ReadMonoStringFromAddress(address)
-	local formattedAddress = string.format('%x', address)
-
-	local sizeAddress = formattedAddress .. "+0x" .. string.format('%x', SystemString["m_stringLength"].Offset)
-	local stringLength = readInteger(sizeAddress)
-	local characterAddress = formattedAddress .. "+0x" .. string.format('%x', SystemString["m_firstChar"].Offset)
-	local value = readString(characterAddress, stringLength * 2, true)
-
-	return value
 end
 
 
