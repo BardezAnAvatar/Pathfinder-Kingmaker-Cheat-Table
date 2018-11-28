@@ -68,6 +68,15 @@ local function GetStaticBaseAddress(namespace, className)
 end
 
 
+--function to return the size of a pointer
+local function GetPointerSize()
+	local pointerSize = 4						--32-bit
+	if (targetIs64Bit()) then pointerSize = 8 	--64 bit
+
+	return pointerSize
+end
+
+
 --load structure definitions
 GenerateKingmakerStructureDefinitions()
 
@@ -242,7 +251,7 @@ local function AddKingdomStatFields(arrayAddress, addressOffset, parentNode)
 	AddChildToParentAddressView(statParent, false, false, false, "Value", "+0x" .. string.format('%x', KingdomStat["Value"].Offset), vtDword)
 	AddChildToParentAddressView(statParent, false, false, false, "Rank", "+0x" .. string.format('%x', KingdomStat["Rank"].Offset), vtDword)
 
-	return addressOffset + 8	--really should use IntPtr.Size, but I mean... it's 64-bit, so it's 8.
+	return addressOffset + GetPointerSize()
 end
 
 
@@ -282,7 +291,7 @@ local function AddKingdomEventFields(listAddress, addressOffset, parentNode, mon
 	--AddChildToParentAddressView(statParent, false, false, false, "Value", "+0x" .. string.format('%x', KingdomStat["Value"].Offset), vtDword)
 	--AddChildToParentAddressView(statParent, false, false, false, "Rank", "+0x" .. string.format('%x', KingdomStat["Rank"].Offset), vtDword)
 
-	return addressOffset + 8	--really should use IntPtr.Size, but I mean... it's 64-bit, so it's 8.
+	return addressOffset + GetPointerSize()
 end
 
 
