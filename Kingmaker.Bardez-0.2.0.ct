@@ -47,6 +47,7 @@ local function GenerateKingmakerStructureDefinitions()
 	KingdomState = GetFields('Kingmaker.Kingdom', 'KingdomState', false)
 	KingdomStats = GetFields('Kingmaker.Kingdom', 'KingdomStats', false)
 	KingdomStat = GetFields('Kingmaker.Kingdom.KingdomStats', 'Stat', false)
+	KingdomEvent = GetFields('Kingmaker.Kingdom.Tasks', 'KingdomEvent', false)
 
 	----DEBUG:
 	--for key, value in pairs(SystemString) do
@@ -196,7 +197,7 @@ local function ReadMonoArray(address, entryHandler, ...)
 	local lengthMethodId = mono_class_findMethod(classId, "get_Length")
 	local arrayLength = mono_invoke_method(mono_enumDomains()[1], lengthMethodId, address, {})
 
-	local currentAddressOffset = 32 --Magic number; apparently the first 0x20 bytes are Array Internals. I cannot see these in the dissect definitions :'(
+	local currentAddressOffset = 32 --Magic number; apparently the first 0x20 bytes are Array internals. I cannot see these in the dissect definitions :'(
 
 	for index = 0, arrayLength - 1 do
 		currentAddressOffset = entryHandler(address, currentAddressOffset, unpack(arg))
@@ -223,6 +224,21 @@ local function AddKingdomStatFields(arrayAddress, addressOffset, parentNode)
 	AddChildToParentAddressView(statParent, false, false, false, "Rank", "+0x" .. string.format('%x', KingdomStat["Rank"].Offset), vtDword)
 
 	return addressOffset + 8	--really should use IntPtr.Size, but I mean... it's 64-bit, so it's 8.
+end
+
+
+--function to read a System.String from memory and return it to a Lua variable
+--params:
+--    address: address in memory of the `System.String` instance
+local function ReadMonoStringFromAddress(address)
+	local formattedAddress = string.format('%x', address)
+
+	local sizeAddress = formattedAddress .. "+0x" .. string.format('%x', SystemString["m_stringLength"].Offset)
+	local stringLength = readInteger(sizeAddress)
+	local characterAddress = formattedAddress .. "+0x" .. string.format('%x', SystemString["m_firstChar"].Offset)
+	local value = readString(characterAddress, stringLength * 2, true)
+
+	return value
 end
 
 
@@ -275,7 +291,7 @@ local function AddKingdomStateFields(instanceNode)
 	local eventsNode = AddChildToParentAddressView(instanceNode, false, true, true, "Active Events", "+0x" .. string.format('%x', KingdomState["ActiveEvents"].Offset), vtQword, nil, 1, { 0 })
 
 	--Tasks
-	local eventsNode = AddChildToParentAddressView(instanceNode, false, true, true, "Active Tasks", "+0x" .. string.format('%x', KingdomState["ActiveTasks"].Offset), vtQword, nil, 1, { 0 })
+	local tasksNode = AddChildToParentAddressView(instanceNode, false, true, true, "Active Tasks", "+0x" .. string.format('%x', KingdomState["ActiveTasks"].Offset), vtQword, nil, 1, { 0 })
 end
 
 
