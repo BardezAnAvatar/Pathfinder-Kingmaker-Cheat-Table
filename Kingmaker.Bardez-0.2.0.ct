@@ -92,6 +92,45 @@ local function ReadMonoStringFromAddress(address)
 end
 
 
+--function to read all items in a .NET array
+--params:
+--    address: address of the array to start reading at
+--    entryHandler: function to invoke, passing an address and returning an address, trusting that it is the address of the next array item
+--NOTE:
+--    This should work, whether the entries are literals, structs, or pointers
+local function ReadMonoArray(address, entryHandler, ...)
+	local arg = {...}  -- arg is now a table of all extra values passed to g 
+	local classId = mono_findClass("System", "Array")
+	local lengthMethodId = mono_class_findMethod(classId, "get_Length")
+	local arrayLength = mono_invoke_method(mono_enumDomains()[1], lengthMethodId, address, {})
+
+	local currentAddressOffset = 32 --Magic number; apparently the first 0x20 bytes are Array internals. I cannot see these in the dissect definitions :'(
+
+	for index = 0, arrayLength - 1 do
+		currentAddressOffset = entryHandler(address, currentAddressOffset, unpack(arg))
+	end
+end
+
+
+--function to read all items in a .NET array
+--params:
+--    address: address of the array to start reading at
+--    entryHandler: function to invoke, passing an address and returning an address, trusting that it is the address of the next array item
+--NOTE:
+--    This should work, whether the entries are literals, structs, or pointers
+local function ReadMonoList(address, entryHandler, ...)
+	local arg = {...}  -- arg is now a table of all extra values passed to g 
+	local lengthOffset = string.format('%x', address).. "+0x18"
+	local length = readInteger(lengthOffset)
+
+	local currentAddressOffset = 16 --Magic number; apparently the first 0x10 bytes are List internals.
+
+	for index = 0, length - 1 do
+		currentAddressOffset = entryHandler(address, currentAddressOffset, unpack(arg))
+	end
+end
+
+
 --load structure definitions
 GenerateKingmakerStructureDefinitions()
 
@@ -206,45 +245,6 @@ local function AddGlobalMapStateFields(instanceNode)
 	AddChildToParentAddressView(instanceNode, false, false, false, "Next Encounter at {value} Miles Traveled (outside of claimed Regions?)", "+0x" .. string.format('%x', GlobalMapState["&lt;NextEncounterRollMiles&gt;k__BackingField"].Offset), vtSingle)
 	AddChildToParentAddressView(instanceNode, false, false, false, "Speed Modifier %", "+0x" .. string.format('%x', GlobalMapState["&lt;SpeedModifier&gt;k__BackingField"].Offset), vtSingle)
 	AddChildToParentAddressView(instanceNode, false, false, false, "Speed Modifier % (in claimed Regions)", "+0x" .. string.format('%x', GlobalMapState["&lt;KingdomSpeedModifier&gt;k__BackingField"].Offset), vtSingle)
-end
-
-
---function to read all items in a .NET array
---params:
---    address: address of the array to start reading at
---    entryHandler: function to invoke, passing an address and returning an address, trusting that it is the address of the next array item
---NOTE:
---    This should work, whether the entries are literals, structs, or pointers
-local function ReadMonoArray(address, entryHandler, ...)
-	local arg = {...}  -- arg is now a table of all extra values passed to g 
-	local classId = mono_findClass("System", "Array")
-	local lengthMethodId = mono_class_findMethod(classId, "get_Length")
-	local arrayLength = mono_invoke_method(mono_enumDomains()[1], lengthMethodId, address, {})
-
-	local currentAddressOffset = 32 --Magic number; apparently the first 0x20 bytes are Array internals. I cannot see these in the dissect definitions :'(
-
-	for index = 0, arrayLength - 1 do
-		currentAddressOffset = entryHandler(address, currentAddressOffset, unpack(arg))
-	end
-end
-
-
---function to read all items in a .NET array
---params:
---    address: address of the array to start reading at
---    entryHandler: function to invoke, passing an address and returning an address, trusting that it is the address of the next array item
---NOTE:
---    This should work, whether the entries are literals, structs, or pointers
-local function ReadMonoList(address, entryHandler, ...)
-	local arg = {...}  -- arg is now a table of all extra values passed to g 
-	local lengthOffset = string.format('%x', address).. "+0x18"
-	local length = readInteger(lengthOffset)
-
-	local currentAddressOffset = 16 --Magic number; apparently the first 0x10 bytes are List internals.
-
-	for index = 0, length - 1 do
-		currentAddressOffset = entryHandler(address, currentAddressOffset, unpack(arg))
-	end
 end
 
 
