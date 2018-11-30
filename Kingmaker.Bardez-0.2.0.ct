@@ -10,7 +10,7 @@
 
 {$lua}
 --code from here to `[ENABLE]` will be run for both `[ENABLE]` and `[DISABLE]`
-
+print("")
 
 --check to see if Mono is available. We use it to inject, so it's kind of a big deal.
 if (LaunchMonoDataCollector()==0) then
@@ -70,8 +70,8 @@ end
 
 --function to return the size of a pointer
 local function GetPointerSize()
-	local pointerSize = 4						--32-bit
-	if (targetIs64Bit()) then pointerSize = 8 	--64 bit
+	local pointerSize = 4							--32-bit
+	if (targetIs64Bit()) then pointerSize = 8 end 	--64 bit
 
 	return pointerSize
 end
@@ -315,7 +315,7 @@ local function AddKingdomEvents(instanceNode)
 	local nameMethodId = mono_class_findMethod(eventClassId, "get_FullName")
 	local monoDomain = mono_enumDomains()[1]
 
-	--ReadMonoList(eventsListAddress, AddKingdomEventFields, instanceNode, monoDomain, nameMethodId)
+	ReadMonoList(eventsListAddress, AddKingdomEventFields, instanceNode, monoDomain, nameMethodId)
 end
 
 
