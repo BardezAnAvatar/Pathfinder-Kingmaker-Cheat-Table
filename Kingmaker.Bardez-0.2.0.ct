@@ -120,13 +120,14 @@ end
 --    This should work, whether the entries are literals, structs, or pointers
 local function ReadMonoList(address, entryHandler, ...)
 	local arg = {...}  -- arg is now a table of all extra values passed to g 
-	local lengthOffset = string.format('%x', address).. "+0x18"
+	local arrayAddressOffset = string.format('%x', address) .. "+0x10"
+	local listUnderlyingArrayAddress = readPointer(arrayAddressOffset)
+	local lengthOffset = string.format('%x', address) .. "+0x18"
 	local length = readInteger(lengthOffset)
 
-	local currentAddressOffset = 16 --Magic number; apparently the first 0x10 bytes are List internals.
-
+	local currentAddressOffset = 32 --Magic number; apparently the first 0x20 bytes are Array internals. I cannot see these in the dissect definitions :'(
 	for index = 0, length - 1 do
-		currentAddressOffset = entryHandler(address, currentAddressOffset, unpack(arg))
+		currentAddressOffset = entryHandler(listUnderlyingArrayAddress, currentAddressOffset, unpack(arg))
 	end
 end
 
